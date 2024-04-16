@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Application" type="CompoundRunConfigurationType">
     <toRun name="client" type="Application" />
+    <toRun name="service: Compose Deployment" type="docker-deploy" />
     <toRun name="ServiceApplication" type="SpringBootApplicationConfigurationType" />
     <method v="2" />
   </configuration>
