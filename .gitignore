@@ -4,6 +4,8 @@
 # Log file
 *.log
 
+**/.env
+
 # BlueJ files
 *.ctxt
 
@@ -23,3 +25,4 @@
 hs_err_pid*
 replay_pid*
 .idea/
+/service/data/
