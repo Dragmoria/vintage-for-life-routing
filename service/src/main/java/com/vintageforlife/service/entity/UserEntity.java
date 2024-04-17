@@ -21,7 +21,7 @@ public class UserEntity {
     @NotBlank(message = "Name can not be blank")
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     @Email(message = "Email should be valid")
     @NotNull(message = "Email can not be null")
     private String email;
@@ -39,7 +39,7 @@ public class UserEntity {
     private String activationLink;
 
     @Column(name = "role", nullable = false)
-    @NotBlank(message = "Role can not be blank")
+    @NotNull(message = "Role can not be blank")
     @Enumerated(EnumType.STRING)
     private Role role;
 
