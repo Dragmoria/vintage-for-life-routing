@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/users")
 public class UserController {
     private final UserService userService;
 
@@ -17,13 +16,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+
+    @GetMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
         UserDTO user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/public/user/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO user) {
         UserDTO createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
