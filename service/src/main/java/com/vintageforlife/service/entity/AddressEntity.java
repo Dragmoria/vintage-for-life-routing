@@ -7,7 +7,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "address")
+@Table(name = "address", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"postcode", "street", "house_number", "extension", "city"})
+})
 public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
