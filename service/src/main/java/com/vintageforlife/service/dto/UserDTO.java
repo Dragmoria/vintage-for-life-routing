@@ -33,9 +33,9 @@ public class UserDTO {
     @ValidRole(message = "Role is not a valid role")
     private Role role;
 
-    public UserDTO(Integer id, String username, String email, String password, Boolean active, String activationLink, Role role) {
+    public UserDTO(Integer id, String name, String email, String password, Boolean active, String activationLink, Role role) {
         this.id = id;
-        this.name = username;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.active = active;
