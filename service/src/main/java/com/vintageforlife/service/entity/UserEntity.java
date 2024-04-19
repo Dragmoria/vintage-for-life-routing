@@ -30,14 +30,6 @@ public class UserEntity {
     @NotBlank(message = "Password can not be blank")
     private String password;
 
-    @Column(name = "active", nullable = false)
-    @NotNull(message = "Active can not be null")
-    private Boolean active;
-
-    @Column(name = "activation_link")
-    @Size(min = 30, max = 30, message = "Activation link should be 30 characters long")
-    private String activationLink;
-
     @Column(name = "role", nullable = false)
     @NotNull(message = "Role can not be blank")
     @Enumerated(EnumType.STRING)
@@ -76,22 +68,6 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public String getActivationLink() {
-        return activationLink;
-    }
-
-    public void setActivationLink(String activationLink) {
-        this.activationLink = activationLink;
     }
 
     public Role getRole() {
