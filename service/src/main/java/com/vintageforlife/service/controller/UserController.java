@@ -16,7 +16,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
         UserDTO user = userService.getUserById(id);

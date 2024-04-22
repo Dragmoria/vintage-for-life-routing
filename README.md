@@ -5,3 +5,4 @@ MYSQL_DATABASE=vintageforlife
 MYSQL_USER=user
 MYSQL_PASSWORD=password
 COMPOSE_PROJECT_NAME=VintageForLife
+
