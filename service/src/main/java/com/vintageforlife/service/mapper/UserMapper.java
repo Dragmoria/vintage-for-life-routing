@@ -10,8 +10,6 @@ public class UserMapper {
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                userEntity.isActive(),
-                userEntity.getActivationLink(),
                 userEntity.getRole()
                 );
     }
@@ -21,8 +19,6 @@ public class UserMapper {
         userEntity.setName(userDTO.getName());
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(userDTO.getPassword());
-        userEntity.setActive(userDTO.getActive());
-        userEntity.setActivationLink(userDTO.getActivationLink());
         userEntity.setRole(userDTO.getRole());
 
         return userEntity;
