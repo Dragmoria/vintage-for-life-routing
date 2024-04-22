@@ -23,23 +23,15 @@ public class UserDTO {
             message = "Password must be at least 8 characters long, contain at least one digit, one lowercase letter, one uppercase letter, and one special character !@#$%^&+=")
     private String password;
 
-    @NotNull(message = "Active can not be null")
-    private Boolean active;
-
-    @JsonIgnore
-    private String activationLink;
-
     @NotNull(message = "Role can not be null")
     @ValidRole(message = "Role is not a valid role")
     private Role role;
 
-    public UserDTO(Integer id, String username, String email, String password, Boolean active, String activationLink, Role role) {
+    public UserDTO(Integer id, String name, String email, String password, Role role) {
         this.id = id;
-        this.name = username;
+        this.name = name;
         this.email = email;
         this.password = password;
-        this.active = active;
-        this.activationLink = activationLink;
         this.role = role;
     }
 
@@ -74,23 +66,7 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public String getActivationLink() {
-        return activationLink;
-    }
-
-    public void setActivationLink(String activationLink) {
-        this.activationLink = activationLink;
-    }
-
+  
     public Role getRole() {
         return role;
     }

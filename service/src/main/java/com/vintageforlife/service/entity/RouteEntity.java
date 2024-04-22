@@ -1,6 +1,7 @@
 package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "route")
@@ -10,8 +11,13 @@ public class RouteEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "distance_km", nullable = false)
-    private Integer distanceKm;
+    @Column(name = "total_distance_km", nullable = false)
+    @NotNull(message = "Total distance can not be null")
+    private Float totalDistanceKm;
+
+    @Column(name = "completed", nullable = false)
+    @NotNull(message = "Completed can not be null")
+    private Boolean completed;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_ID"))
@@ -25,12 +31,13 @@ public class RouteEntity {
         this.id = id;
     }
 
-    public Integer getDistanceKm() {
-        return distanceKm;
+    public Float getTotalDistanceKm() {
+        return totalDistanceKm;
     }
 
-    public void setDistanceKm(Integer distanceKm) {
-        this.distanceKm = distanceKm;
+    public void setTotalDistanceKm(Float distanceKm) {
+        this.totalDistanceKm = distanceKm;
+
     }
 
     public UserEntity getUser() {
@@ -39,5 +46,13 @@ public class RouteEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
 }
