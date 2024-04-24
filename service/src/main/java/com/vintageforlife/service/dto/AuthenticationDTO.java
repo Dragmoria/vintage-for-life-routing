@@ -1,9 +1,11 @@
 package com.vintageforlife.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthenticationDTO {
     @NotNull(message = "Email can not be null")
     @Email(message = "Email should be valid")

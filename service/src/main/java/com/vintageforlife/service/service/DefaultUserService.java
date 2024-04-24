@@ -5,15 +5,18 @@ import com.vintageforlife.service.entity.UserEntity;
 import com.vintageforlife.service.mapper.UserMapper;
 import com.vintageforlife.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultUserService implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DefaultUserService(UserRepository userRepository) {
+    public DefaultUserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -26,6 +29,7 @@ public class DefaultUserService implements UserService {
     @Override
     public UserDTO createUser(UserDTO user) {
         UserEntity userEntity = UserMapper.makeUserEntity(user);
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         UserEntity savedUserEntity = userRepository.save(userEntity);
         return UserMapper.makeUserDTO(savedUserEntity);
     }

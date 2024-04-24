@@ -1,7 +1,10 @@
 package com.vintageforlife.service.controller;
 
 import com.vintageforlife.service.dto.AuthenticationDTO;
-import com.vintageforlife.service.util.JwtUtil;
+import com.vintageforlife.service.dto.AuthenticationResponseDTO;
+import com.vintageforlife.service.dto.UserDTO;
+import com.vintageforlife.service.service.AuthenticationService;
+import com.vintageforlife.service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +14,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
-    private JwtUtil jwtUtil;
+    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @Autowired
-    public AuthController(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    public AuthController(AuthenticationService authenticationService, UserService userService) {
+        this.authenticationService = authenticationService;
+        this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO authenticationDTO) {
-        jwtUtil.test();
-        return ResponseEntity.ok().build();
+        try {
+            String token = authenticationService.authenticate(authenticationDTO.getEmail(), authenticationDTO.getPassword());
+
+            AuthenticationResponseDTO response = new AuthenticationResponseDTO(token);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserDTO userDTO) {
+        UserDTO createdUser = userService.createUser(userDTO);
+        return ResponseEntity.ok(createdUser);
     }
 }

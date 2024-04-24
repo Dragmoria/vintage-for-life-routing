@@ -33,6 +33,20 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(getSecretKey()).build().parseSignedClaims(token).getPayload();
     }
 
+    public boolean isTokenExpired(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            boolean isExpired = claims.getExpiration().before(new Date());
+            return claims.getExpiration().before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    public String extractUsername(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
     private String createToken(UserDetails userDetails, Map<String, Object> additionalClaims) {
         return Jwts.builder()
                 .claims(additionalClaims)
