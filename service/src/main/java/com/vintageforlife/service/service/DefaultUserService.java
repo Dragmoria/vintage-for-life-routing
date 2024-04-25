@@ -27,6 +27,14 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public UserDTO getUserByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " does not exist"));
+
+        return UserMapper.makeUserDTO(userEntity);
+    }
+
+    @Override
     public UserDTO createUser(UserDTO user) {
         UserEntity userEntity = UserMapper.makeUserEntity(user);
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));

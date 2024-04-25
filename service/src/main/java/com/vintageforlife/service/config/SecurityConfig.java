@@ -19,7 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig  {
     private static final String[] WHITE_LIST_URL = {
-            "/api/auth/**",
+            "/api/v1/auth/**",
+            "/api/v1/public/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -53,10 +54,7 @@ public class SecurityConfig  {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder
-    ) {
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);

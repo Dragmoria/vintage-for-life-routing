@@ -4,17 +4,16 @@ import com.vintageforlife.service.dto.UserDTO;
 import com.vintageforlife.service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1")
 public class UserController {
     private final UserService userService;
 
@@ -23,24 +22,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/info", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserDTO> getUserById() {
-        UserDTO user = userService.getUserById(1);
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping(value = "test")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping(value = "/user/info", produces = "application/json")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_CARRIER', 'ROLE_ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Test");
-    }
+    public ResponseEntity<UserDTO> getUserInformation() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .components(new Components()
-                        .addSecuritySchemes("bearer-key",
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+
+        String username = userDetails.getUsername();
+
+        UserDTO user = userService.getUserByEmail(username);
+        return ResponseEntity.ok(user);
     }
 }
