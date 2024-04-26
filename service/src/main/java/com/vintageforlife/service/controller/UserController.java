@@ -5,7 +5,6 @@ import com.vintageforlife.service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -35,14 +34,5 @@ public class UserController {
 
         UserDTO user = userService.getUserByEmail(username);
         return ResponseEntity.ok(user);
-    }
-
-
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-
-    @GetMapping(value = "/public/test/jwt")
-    public ResponseEntity<String> testJwt() {
-        return ResponseEntity.ok(secretKey);
     }
 }
