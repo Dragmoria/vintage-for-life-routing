@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface RouteService {
     List<RouteDTO> getRoutesByUserId(Integer userId);
+
+    List<RouteDTO> getAllRoutes();
 }
