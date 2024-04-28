@@ -1,4 +1,4 @@
-package com.vintageforlife.service.service;
+package com.vintageforlife.service.services.authentication;
 
 import com.vintageforlife.service.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;

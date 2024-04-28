@@ -1,29 +1,37 @@
 package com.vintageforlife.service.mapper;
 
 import com.vintageforlife.service.dto.RouteDTO;
+import com.vintageforlife.service.dto.UserDTO;
 import com.vintageforlife.service.entity.RouteEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class RouteMapper {
-    public static RouteDTO makeRouteDTO(RouteEntity entity) {
-        RouteDTO.RouteDTOBuilder routeDTOBuilder = new RouteDTO.RouteDTOBuilder(
-                entity.getId(),
-                entity.getTotalDistanceKm(),
-                UserMapper.makeUserDTO(entity.getUser())
-        );
+@Component
+public class RouteMapper implements Mapper<RouteEntity, RouteDTO>{
+    private final UserMapper userMapper;
 
-        if (entity.getCompleted() != null) {
-            routeDTOBuilder.completed(entity.getCompleted());
-        }
-
-        return routeDTOBuilder.build();
+    @Autowired
+    public RouteMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
-    public static RouteEntity makeRouteEntity(RouteDTO dto) {
-        RouteEntity entity = new RouteEntity();
-        entity.setTotalDistanceKm(dto.getTotalDistanceKm());
-        entity.setCompleted(dto.getCompleted());
-        entity.setUser(UserMapper.makeUserEntity(dto.getUser()));
+    public RouteEntity toEntity(RouteDTO dto) {
+        return RouteEntity.builder()
+                .totalDistanceKm(dto.getTotalDistanceKm())
+                .completed(dto.getCompleted())
+                .build();
+    }
 
-        return entity;
+    public RouteDTO toDTO(RouteEntity entity) {
+        UserDTO userDTO = null;
+        if (entity.getUser() != null) {
+            userDTO = userMapper.toDTO(entity.getUser());
+        }
+
+        return RouteDTO.builder()
+                .totalDistanceKm(entity.getTotalDistanceKm())
+                .completed(entity.getCompleted())
+                .user(userDTO)
+                .build();
     }
 }

@@ -1,7 +1,7 @@
 package com.vintageforlife.service.controller;
 
 import com.vintageforlife.service.dto.RouteDTO;
-import com.vintageforlife.service.service.RouteService;
+import com.vintageforlife.service.services.database.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
