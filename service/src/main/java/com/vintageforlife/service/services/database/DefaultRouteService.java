@@ -1,4 +1,4 @@
-package com.vintageforlife.service.service;
+package com.vintageforlife.service.services.database;
 
 import com.vintageforlife.service.dto.RouteDTO;
 import com.vintageforlife.service.mapper.RouteMapper;
@@ -21,14 +21,14 @@ public class DefaultRouteService implements RouteService {
     @Override
     public List<RouteDTO> getRoutesByUserId(Integer userId) {
         return routeRepository.findByUserId(userId).stream()
-                .map(RouteMapper::makeRouteDTO)
+                .map(RouteMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<RouteDTO> getAllRoutes() {
         return StreamSupport.stream(routeRepository.findAll().spliterator(), false)
-                .map(RouteMapper::makeRouteDTO)
+                .map(RouteMapper::toDTO)
                 .collect(Collectors.toList());
     }
 }

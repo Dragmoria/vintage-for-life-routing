@@ -1,4 +1,4 @@
-package com.vintageforlife.service.service;
+package com.vintageforlife.service.services.database;
 
 import com.vintageforlife.service.dto.UserDTO;
 

@@ -2,25 +2,26 @@ package com.vintageforlife.service.mapper;
 
 import com.vintageforlife.service.dto.UserDTO;
 import com.vintageforlife.service.entity.UserEntity;
+import org.springframework.stereotype.Component;
 
-public class UserMapper {
-    public static UserDTO makeUserDTO(UserEntity userEntity) {
-        return new UserDTO(
-                userEntity.getId(),
-                userEntity.getName(),
-                userEntity.getEmail(),
-                userEntity.getPassword(),
-                userEntity.getRole()
-                );
+@Component
+public class UserMapper implements Mapper<UserEntity, UserDTO> {
+    @Override
+    public UserEntity toEntity(UserDTO dto) {
+        return UserEntity.builder()
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .role(dto.getRole())
+                .build();
     }
 
-    public static UserEntity makeUserEntity(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setName(userDTO.getName());
-        userEntity.setEmail(userDTO.getEmail());
-        userEntity.setPassword(userDTO.getPassword());
-        userEntity.setRole(userDTO.getRole());
-
-        return userEntity;
+    @Override
+    public UserDTO toDTO(UserEntity entity) {
+        return UserDTO.builder()
+                .name(entity.getName())
+                .email(entity.getEmail())
+                .role(entity.getRole())
+                .build();
     }
 }

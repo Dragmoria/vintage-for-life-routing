@@ -1,47 +1,35 @@
 package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "distribution_center")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DistributionCenterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ADDRESS_ID"))
-    @NotNull(message = "Address can not be null")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "FK_DISTRIBUTION_CENTER_TO_ADDRESS_ID"))
+    @NonNull
     private AddressEntity address;
 
     @Column(name = "name", nullable = false, unique = true)
-    @NotBlank(message = "Name can not be blank")
+    @NonNull
     private String name;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "distributionCenter", fetch = FetchType.LAZY)
+    private List<ProductEntity> products;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public AddressEntity getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressEntity address) {
-        this.address = address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "distributionCenter", fetch = FetchType.LAZY)
+    private List<TransportSettingEntity> transportSettings;
 }
