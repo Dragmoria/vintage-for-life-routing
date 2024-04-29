@@ -27,23 +27,7 @@ public class DistributionCenterService {
     }
 
     @Transactional
-    public DistributionCenterEntity fetchDistributionCenterEntity(int id) {
-        DistributionCenterEntity distributionCenterEntity = distributionCenterRepository.findById(id).get();
-        distributionCenterEntity.getAddress();
-        return distributionCenterEntity;
-    }
-
-    @Transactional
     public List<DistributionCenterDTO> getAllDistributionCenters() {
-//        return StreamSupport.stream(distributionCenterRepository.findAll().spliterator(), false)
-//                .map(e -> {
-//                    DistributionCenterDTO distributionCenterDTO = distributionCenterMapper.toDTO(e);
-//                    distributionCenterMapper.addToDTO(e.getAddress(), distributionCenterDTO);
-//                    return distributionCenterDTO;
-//                })
-//                .collect(Collectors.toList());
-
-
         return StreamSupport.stream(distributionCenterRepository.findAll().spliterator(), false)
                 .map(e -> {
                     DistributionCenterDTO distributionCenterDTO = distributionCenterMapper.toDTO(e);

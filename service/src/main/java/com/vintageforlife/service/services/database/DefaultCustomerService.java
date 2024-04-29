@@ -14,10 +14,12 @@ import java.util.stream.StreamSupport;
 @Service
 public class DefaultCustomerService implements CustomerService {
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
     @Autowired
-    public DefaultCustomerService(CustomerRepository customerRepository) {
+    public DefaultCustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     @Override
@@ -27,18 +29,16 @@ public class DefaultCustomerService implements CustomerService {
 
     @Override
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-//        CustomerEntity customerEntity = CustomerMapper.toEntity(customerDTO);
-//        CustomerEntity savedCustomerEntity = customerRepository.save(customerEntity);
-//
-//        return CustomerMapper.toDTO(savedCustomerEntity);
-        return null;
+        CustomerEntity customerEntity = customerMapper.toEntity(customerDTO);
+        CustomerEntity savedCustomerEntity = customerRepository.save(customerEntity);
+
+        return customerMapper.toDTO(savedCustomerEntity);
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-//        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
-//                .map(CustomerMapper::toDTO)
-//                .collect(Collectors.toList());
-        return null;
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+                .map(customerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
