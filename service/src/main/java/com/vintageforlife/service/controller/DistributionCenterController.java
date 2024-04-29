@@ -33,16 +33,6 @@ public class DistributionCenterController {
         this.addressMapper = addressMapper;
     }
 
-    @GetMapping("/distribution-center")
-    public ResponseEntity<?> getDistributionCenter() {
-        DistributionCenterEntity distributionCenterEntity = distributionCenterService.fetchDistributionCenterEntity(1);
-        DistributionCenterDTO distributionCenterDTO = distributionCenterMapper.toDTO(distributionCenterEntity);
-        distributionCenterMapper.addToDTO(distributionCenterEntity.getAddress(), distributionCenterDTO);
-
-        return ResponseEntity.ok(distributionCenterDTO);
-
-    }
-
     @GetMapping("/distribution-centers")
     public ResponseEntity<?> getDistributionCenters() {
         List<DistributionCenterDTO> distributionCenterDTOS = distributionCenterService.getAllDistributionCenters();
