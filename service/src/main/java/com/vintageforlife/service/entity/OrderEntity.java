@@ -21,7 +21,6 @@ public class OrderEntity {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false, foreignKey = @ForeignKey(name = "FK_CUSTOMER_ID"))
-    @NotBlank(message = "Customer id can not be null")
     private CustomerEntity customer;
 
     @ManyToOne

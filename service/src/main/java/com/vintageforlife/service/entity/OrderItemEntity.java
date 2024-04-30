@@ -27,6 +27,9 @@ public class OrderItemEntity {
     @NotBlank(message = "Retour can not be null")
     private Boolean retour;
 
+    @OneToMany(mappedBy = "orderItem")
+    private List<OrderItemEntity> orderItems;
+
     public Integer getId() {
         return id;
     }
