@@ -1,7 +1,9 @@
 package com.vintageforlife.service.routing;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface RoutingService {
-//    void createGraph(List<OrderItemWithAddressDTO> orderItemsWithAddress);
+    Graph createGraph();
+
+    void calculateRoute(Graph graph);
 }
