@@ -29,6 +29,7 @@ import java.util.Date;
     @NotBlank(message = "Address id can not be null")
     private AddressEntity address;
 
+
     public Integer getId() {
         return id;
     }
