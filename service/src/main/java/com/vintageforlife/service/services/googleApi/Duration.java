@@ -1,5 +1,6 @@
 package com.vintageforlife.service.services.googleApi;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Duration {
     private String text;
-    private int value;
+
+    @JsonProperty("value")
+    private int seconds;
 }
