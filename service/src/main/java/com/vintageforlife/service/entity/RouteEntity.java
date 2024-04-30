@@ -37,6 +37,7 @@ public class RouteEntity {
 
     public void setTotalDistanceKm(Float distanceKm) {
         this.totalDistanceKm = distanceKm;
+
     }
 
     public UserEntity getUser() {
