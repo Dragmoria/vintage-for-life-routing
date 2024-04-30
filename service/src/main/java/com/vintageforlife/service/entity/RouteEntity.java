@@ -2,6 +2,7 @@ package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "route")
@@ -23,6 +24,9 @@ public class RouteEntity {
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_ID"))
     private UserEntity user;
 
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<RouteStepEntity> routeSteps;
+
     public Integer getId() {
         return id;
     }
@@ -37,7 +41,6 @@ public class RouteEntity {
 
     public void setTotalDistanceKm(Float distanceKm) {
         this.totalDistanceKm = distanceKm;
-
     }
 
     public UserEntity getUser() {
@@ -54,5 +57,13 @@ public class RouteEntity {
 
     public void setCompleted(Boolean completed) {
         this.completed = completed;
+    }
+
+    public List<RouteStepEntity> getRouteSteps() {
+        return routeSteps;
+    }
+
+    public void setRouteSteps(List<RouteStepEntity> routeSteps) {
+        this.routeSteps = routeSteps;
     }
 }
