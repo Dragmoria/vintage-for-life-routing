@@ -39,7 +39,7 @@ public class ProductEntity {
     }
 
     public DistributionCenterEntity getDistributionCenter() {
-        return customer;
+        return distributionCenter;
     }
 
     public void setDistributionCenter(DistributionCenterEntity distributionCenter) {
