@@ -26,7 +26,7 @@ public class ProductEntity {
     @NotBlank(message = "Height can not be blank")
     private Float height;
 
-    @Column(name = "depth", nullable = false, unique = true)
+    @Column(name = "depth", nullable = false)
     @NotBlank(message = "Depth can not be blank")
     private Float depth;
 
