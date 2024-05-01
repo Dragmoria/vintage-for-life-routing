@@ -3,6 +3,7 @@ package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table(name = "order_item")
@@ -27,8 +28,6 @@ public class OrderItemEntity {
     @NotBlank(message = "Retour can not be null")
     private Boolean retour;
 
-    @OneToMany(mappedBy = "orderItem")
-    private List<OrderItemEntity> orderItems;
 
     public Integer getId() {
         return id;

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -29,7 +30,8 @@ import java.util.Date;
     @NotBlank(message = "Address id can not be null")
     private AddressEntity address;
 
-
+    @OneToMany(mappedBy = "order")
+    private List<OrderEntity> OrderEntity;
     public Integer getId() {
         return id;
     }
