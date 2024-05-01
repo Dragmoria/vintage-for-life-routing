@@ -18,6 +18,18 @@ public class ProductEntity {
     @JoinColumn(name = "distribution_center_id", nullable = false, foreignKey = @ForeignKey(name = "FK_DISTRIBUTION_CENTER_ID"))
     private DistributionCenterEntity distributionCenter;
 
+    @Column(name = "width", nullable = false)
+    @NotBlank(message = "Width can not be blank")
+    private Float width;
+
+    @Column(name = "height", nullable = false)
+    @NotBlank(message = "Height can not be blank")
+    private Float height;
+
+    @Column(name = "depth", nullable = false, unique = true)
+    @NotBlank(message = "Depth can not be blank")
+    private Float depth;
+
     public Integer getId() {
         return id;
     }
@@ -30,7 +42,7 @@ public class ProductEntity {
         return customer;
     }
 
-    public void setgetDistributionCenter(DistributionCenterEntity distributionCenter) {
+    public void setDistributionCenter(DistributionCenterEntity distributionCenter) {
         this.distributionCenter = distributionCenter;
     }
 
@@ -51,7 +63,7 @@ public class ProductEntity {
     }
 
     public Float getDepth() {
-        return height;
+        return depth;
     }
 
     public void setDepth(Float depth) {
