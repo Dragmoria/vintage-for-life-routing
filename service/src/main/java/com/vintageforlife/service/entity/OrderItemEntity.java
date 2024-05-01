@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
-@Table(name = "order_item")
+@Table(name = "`order_item`")
 
 public class OrderItemEntity {
     @Id
@@ -15,12 +15,12 @@ public class OrderItemEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDER_ID"))
+    @JoinColumn(name = "order_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDERITEM_ORDER_ID"))
     @NotBlank(message = "Order id can not be null")
     private OrderEntity order;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCT_ID"))
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDERITEM_PRODUCT_ID"))
     @NotBlank(message = "Product id can not be null")
     private ProductEntity product;
 

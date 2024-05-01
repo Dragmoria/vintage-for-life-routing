@@ -25,12 +25,12 @@ public class RouteStepEntity {
     private Boolean completed;
 
     @ManyToOne
-    @JoinColumn(name = "route_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ROUTE_ID"))
+    @JoinColumn(name = "route_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ROUTESTEP_ROUTE_ID"))
     @NotNull(message = "Route can not be null")
     private RouteEntity route;
 
     @OneToOne
-    @JoinColumn(name = "order_item_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDER_ITEM_ID"))
+    @JoinColumn(name = "order_item_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ROUTESTEP_ORDER_ITEM_ID"))
     @NotNull(message = "Order item can not be null")
     private OrderItemEntity orderItem;
 
