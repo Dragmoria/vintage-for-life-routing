@@ -4,11 +4,9 @@ import com.vintageforlife.service.routing.Graph;
 import com.vintageforlife.service.routing.Node;
 import com.vintageforlife.service.routing.algorithm.Algorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class GeneticAlgorithm implements Algorithm {

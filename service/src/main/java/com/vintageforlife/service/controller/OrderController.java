@@ -1,6 +1,7 @@
 package com.vintageforlife.service.controller;
 
 import com.vintageforlife.service.dto.NodeDTO;
+import com.vintageforlife.service.dto.OrderDTO;
 import com.vintageforlife.service.routing.Graph;
 import com.vintageforlife.service.routing.RoutingService;
 import com.vintageforlife.service.services.database.OrderService;
@@ -9,10 +10,7 @@ import com.vintageforlife.service.services.googleApi.MatrixResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,16 +38,8 @@ public class OrderController {
                 .collect(Collectors.toList()));
     }
 
-    @PostMapping("/public/testAlgorithm")
-    public ResponseEntity<String> testAlgorithm() {
-        Graph graph = routingService.createGraph();
-
-        routingService.calculateRoute(graph);
-
-//        routingService.calculateRoute(graph).thenAccept(result -> {
-//            System.out.println("Succes???");
-//        });
-
-        return new ResponseEntity<>("Algorithm started", HttpStatus.ACCEPTED);
+    @PostMapping("/public/orders/")
+    public ResponseEntity<List<OrderDTO>> createOrders(@RequestBody List<OrderDTO> order) {
+        return ResponseEntity.ok(null);
     }
 }

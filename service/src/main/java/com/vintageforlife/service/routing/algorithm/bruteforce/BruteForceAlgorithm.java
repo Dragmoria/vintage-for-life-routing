@@ -5,8 +5,6 @@ import com.vintageforlife.service.routing.Node;
 import com.vintageforlife.service.routing.algorithm.Algorithm;
 import com.vintageforlife.service.routing.algorithm.geneticAlgorithm.AlgorithmResult;
 import com.vintageforlife.service.routing.algorithm.geneticAlgorithm.Individual;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.LinkedList;
