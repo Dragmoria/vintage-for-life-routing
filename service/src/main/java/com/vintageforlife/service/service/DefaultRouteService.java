@@ -5,9 +5,9 @@ import com.vintageforlife.service.mapper.RouteMapper;
 import com.vintageforlife.service.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class DefaultRouteService implements RouteService {
@@ -21,6 +21,13 @@ public class DefaultRouteService implements RouteService {
     @Override
     public List<RouteDTO> getRoutesByUserId(Integer userId) {
         return routeRepository.findByUserId(userId).stream()
+                .map(RouteMapper::makeRouteDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RouteDTO> getAllRoutes() {
+        return StreamSupport.stream(routeRepository.findAll().spliterator(), false)
                 .map(RouteMapper::makeRouteDTO)
                 .collect(Collectors.toList());
     }

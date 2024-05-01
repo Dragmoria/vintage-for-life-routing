@@ -35,6 +35,10 @@ public class UserDTO {
         this.role = role;
     }
 
+    public UserDTO() {
+        System.out.println("UserDTO created");
+    }
+
     public Integer getId() {
         return id;
     }
