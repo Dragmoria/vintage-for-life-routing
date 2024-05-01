@@ -12,7 +12,7 @@ public class TransportSettingEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "distribution_center_id", nullable = false, foreignKey = @ForeignKey(name = "FK_DISTRIBUTION_CENTER_ID"))
+    @JoinColumn(name = "distribution_center_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TRANSPORTSETTING_DISTRIBUTION_CENTER_ID"))
     private DistributionCenterEntity distributionCenter;
 
     @Column(name = "name", nullable = false)

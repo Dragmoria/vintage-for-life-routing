@@ -15,7 +15,7 @@ public class ProductEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "distribution_center_id", nullable = false, foreignKey = @ForeignKey(name = "FK_DISTRIBUTION_CENTER_ID"))
+    @JoinColumn(name = "distribution_center_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCT_DISTRIBUTION_CENTER_ID"))
     private DistributionCenterEntity distributionCenter;
 
     @Column(name = "width", nullable = false)
