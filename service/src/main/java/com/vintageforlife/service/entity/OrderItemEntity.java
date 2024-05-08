@@ -2,62 +2,39 @@ package com.vintageforlife.service.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import java.util.List;
+import lombok.*;
 
 @Entity
 @Table(name = "`order_item`")
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDERITEM_ORDER_ID"))
-    @NotBlank(message = "Order id can not be null")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDER_ITEM_ORDER_ID"))
+    @NonNull
     private OrderEntity order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDERITEM_PRODUCT_ID"))
-    @NotBlank(message = "Product id can not be null")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDER_ITEM_PRODUCT_ID"))
+    @NonNull
     private ProductEntity product;
 
     @Column(name = "retour", nullable = false)
-    @NotBlank(message = "Retour can not be null")
+    @NonNull
     private Boolean retour;
 
+    @Column(name = "completed", nullable = false)
+    @NonNull
+    private Boolean completed;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public OrderEntity getOrder() {
-        return order;
-    }
-
-    public void setOrder(OrderEntity order) {
-        this.order = order;
-    }
-
-    public ProductEntity getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductEntity product) {
-        this.product = product;
-    }
-
-    public Boolean getRetour() {
-        return retour;
-    }
-
-    public void setRetour(Boolean retour) {
-        this.retour = retour;
-    }
+    @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY)
+    private RouteStepEntity routeStep;
 }
