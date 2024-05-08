@@ -21,7 +21,7 @@ public class OrderEntity {
     private Integer id;
 
     @Column(name = "date", nullable = false)
-    @NotBlank(message = "Date can not be null")
+    @NonNull
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)

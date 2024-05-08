@@ -20,12 +20,10 @@ public class RouteEntity {
     private Integer id;
 
     @Column(name = "total_distance_km", nullable = false)
-    @NotNull(message = "Total distance can not be null")
     @NonNull
     private Float totalDistanceKm;
 
     @Column(name = "completed", nullable = false)
-    @NotNull(message = "Completed can not be null")
     @NonNull
     private Boolean completed;
 
