@@ -1,7 +1,7 @@
 package com.vintageforlife.service.controller;
 
 import com.vintageforlife.service.dto.UserDTO;
-import com.vintageforlife.service.service.UserService;
+import com.vintageforlife.service.services.database.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
