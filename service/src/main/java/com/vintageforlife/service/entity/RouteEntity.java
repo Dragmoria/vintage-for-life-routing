@@ -29,7 +29,7 @@ public class RouteEntity {
     @NonNull
     private Boolean completed;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_ROUTE_TO_USER_ID"))
     private UserEntity user;
 

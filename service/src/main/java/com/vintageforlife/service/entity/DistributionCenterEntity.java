@@ -1,6 +1,8 @@
 package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class DistributionCenterEntity {
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "FK_DISTRIBUTION_CENTER_TO_ADDRESS_ID"))
+    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ADDRESS_ID"))
     @NonNull
     private AddressEntity address;
 
@@ -27,9 +29,9 @@ public class DistributionCenterEntity {
     @NonNull
     private String name;
 
-    @OneToMany(mappedBy = "distributionCenter", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "distributionCenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductEntity> products;
 
-    @OneToMany(mappedBy = "distributionCenter", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "distributionCenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TransportSettingEntity> transportSettings;
 }

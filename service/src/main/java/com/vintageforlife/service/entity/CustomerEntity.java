@@ -1,7 +1,6 @@
 package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -20,15 +19,13 @@ public class CustomerEntity {
     private Integer id;
 
     @Column(name = "external_id", nullable = false)
-    @NotNull(message = "External id can not be null")
     @NonNull
     private Integer externalId;
 
     @Column(name = "name", nullable = false)
-    @NotNull(message = "Name can not be null")
     @NonNull
     private String name;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<OrderEntity> orders;
 }
