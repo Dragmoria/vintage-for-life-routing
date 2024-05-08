@@ -19,6 +19,7 @@ public class TransportSettingEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "distribution_center_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TRANSPORT_SETTING_DISTRIBUTION_CENTER_ID"))
+    @NonNull
     private DistributionCenterEntity distributionCenter;
 
     @Column(name = "name", nullable = false)
