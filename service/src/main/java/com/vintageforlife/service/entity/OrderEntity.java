@@ -33,7 +33,14 @@ public class OrderEntity {
     @NonNull
     private AddressEntity address;
 
+    @Column(name = "retour", nullable = false)
+    @NonNull
+    private Boolean retour;
+
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RouteStepEntity routeStep;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderItemEntity> orderItemEntities;
+    private List<OrderItemEntity> orderItems;
 }
 

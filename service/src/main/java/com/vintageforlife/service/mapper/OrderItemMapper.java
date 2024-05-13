@@ -19,18 +19,14 @@ public class OrderItemMapper implements Mapper<OrderItemEntity, OrderItemDTO> {
     @Override
     public OrderItemEntity toEntity(OrderItemDTO dto) {
         return OrderItemEntity.builder()
-                .order(orderMapper.toEntity(dto.getOrder()))
-                .retour(dto.getRetour())
-                .completed(dto.getCompleted())
                 .product(productMapper.toEntity(dto.getProduct()))
+                .order(orderMapper.toEntity(dto.getOrder()))
                 .build();
     }
 
     @Override
     public OrderItemDTO toDTO(OrderItemEntity entity) {
         return OrderItemDTO.builder()
-                .retour(entity.getRetour())
-                .completed(entity.getCompleted())
                 .product(productMapper.toDTO(entity.getProduct()))
                 .build();
     }

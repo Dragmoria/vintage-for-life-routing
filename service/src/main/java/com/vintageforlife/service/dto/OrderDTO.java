@@ -26,6 +26,10 @@ public class OrderDTO {
     @NonNull
     private Date date;
 
+    @NotNull(message = "Retour can not be null")
+    @NonNull
+    private Boolean retour;
+
     @NotNull(message = "OrderItems can not be null")
     @Size(min = 1, message = "OrderItems should have at least one item")
     private List<OrderItemDTO> orderItems;

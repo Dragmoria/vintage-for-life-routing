@@ -29,6 +29,7 @@ public class RouteMapper implements Mapper<RouteEntity, RouteDTO>{
         }
 
         return RouteDTO.builder()
+                .id(entity.getId())
                 .totalDistanceKm(entity.getTotalDistanceKm())
                 .completed(entity.getCompleted())
                 .user(userDTO)

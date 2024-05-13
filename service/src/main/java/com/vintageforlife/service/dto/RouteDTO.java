@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class RouteDTO {
+    private Integer id;
+
     @NotNull(message = "Total distance can not be null")
     @Positive(message = "Total distance should be positive")
     @NonNull
