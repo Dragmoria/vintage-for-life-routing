@@ -10,4 +10,6 @@ public interface CustomerService {
     CustomerDTO createCustomer(CustomerDTO customerDTO);
 
     List<CustomerDTO> getAllCustomers();
+
+    void deleteCustomer(Integer externalId);
 }

@@ -22,15 +22,17 @@ public class OrderMapper implements Mapper<OrderEntity, OrderDTO> {
                 .date(dto.getDate())
                 .customer(customerMapper.toEntity(dto.getCustomer()))
                 .address(addressMapper.toEntity(dto.getAddress()))
+                .retour(dto.getRetour())
                 .build();
     }
 
     @Override
     public OrderDTO toDTO(OrderEntity entity) {
         return OrderDTO.builder()
-                .date(entity.getDate())
                 .customer(customerMapper.toDTO(entity.getCustomer()))
                 .address(addressMapper.toDTO(entity.getAddress()))
+                .date(entity.getDate())
+                .retour(entity.getRetour())
                 .build();
     }
 }

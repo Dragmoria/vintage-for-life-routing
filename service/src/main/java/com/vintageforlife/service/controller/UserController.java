@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/user/info", produces = "application/json")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_CARRIER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_CARRIER')")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<UserDTO> getUserInformation() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -26,10 +26,10 @@ public class RouteStepDTO {
     @NonNull
     private Boolean completed;
 
-    @NotNull(message = "Order item can not be null")
-    @NonNull
-    private OrderItemDTO orderItem;
-
     @NotNull(message = "Route can not be null")
     private RouteDTO route;
+
+    @NonNull
+    @NotNull(message = "Order can not be null")
+    private OrderDTO order;
 }

@@ -26,15 +26,4 @@ public class OrderItemEntity {
     @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDER_ITEM_PRODUCT_ID"))
     @NonNull
     private ProductEntity product;
-
-    @Column(name = "retour", nullable = false)
-    @NonNull
-    private Boolean retour;
-
-    @Column(name = "completed", nullable = false)
-    @NonNull
-    private Boolean completed;
-
-    @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY)
-    private RouteStepEntity routeStep;
 }
