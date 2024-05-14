@@ -10,6 +10,8 @@ import com.vintageforlife.service.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -51,5 +53,38 @@ public class DefaultOrderService implements OrderService {
         orderDTO.setOrderItems(orderItemDTOs);
 
         return orderDTO;
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersForDay(Date date) {
+        return orderRepository.findByDate(date).stream()
+                .map(orderEntity -> {
+                    List<OrderItemEntity> orderItemEntities = orderEntity.getOrderItems();
+                    List<OrderItemDTO> orderItemDTOs = orderItemEntities.stream().map(orderItemMapper::toDTO).toList();
+
+                    OrderDTO orderDTO = orderMapper.toDTO(orderEntity);
+                    orderDTO.setOrderItems(orderItemDTOs);
+
+                    return orderDTO;
+                }).toList();
+    }
+
+    @Override
+    public List<OrderDTO> getAllOrdersFromLast24Hours() {
+        Date endDate = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date startDate = cal.getTime();
+
+        return orderRepository.findOrdersBetweenDates(startDate, endDate).stream()
+                .map(orderEntity -> {
+                    List<OrderItemEntity> orderItemEntities = orderEntity.getOrderItems();
+                    List<OrderItemDTO> orderItemDTOs = orderItemEntities.stream().map(orderItemMapper::toDTO).toList();
+
+                    OrderDTO orderDTO = orderMapper.toDTO(orderEntity);
+                    orderDTO.setOrderItems(orderItemDTOs);
+
+                    return orderDTO;
+                }).toList();
     }
 }
