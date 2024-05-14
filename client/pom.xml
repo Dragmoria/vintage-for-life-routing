@@ -17,7 +17,24 @@
 
   <dependencies>
     <!-- Eigen dependency -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.32</version> <!-- of de nieuwste versie -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>7.0.2.Final</version> <!-- of de nieuwste versie -->
+    </dependency>
 
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>20.1.0</version> <!-- of de nieuwste versie -->
+      <scope>provided</scope>
+    </dependency>
 
     <!-- JavaFX dependencies -->
     <dependency>
@@ -58,6 +75,7 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.15.2</version>
     </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -66,7 +84,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.15.2</version>
+      <version>2.16.2</version>
     </dependency>
 
     <!-- BootstrapFX dependency -->

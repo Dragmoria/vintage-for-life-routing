@@ -1,0 +1,57 @@
+/* Voorbeeld van homepage.css */
+
+/* Stijlen voor de bovenste navigatiebalk */
+#topbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+/* Stijlen voor de naam van de homepage */
+#homeName {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Stijlen voor de navigatieknoppen */
+.navButton {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* Stijlen voor de routesectie */
+#routes {
+    margin-top: 20px;
+}
+
+/* Stijlen voor de route-items */
+.routeItem {
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Stijlen voor de actieknoppen van de route-items */
+.actionButton {
+    background-color: #28a745;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.label-vintage {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+
+/* Overige stijlen */
+/* Voeg hier andere stijlen toe die je nodig hebt voor je toepassing */

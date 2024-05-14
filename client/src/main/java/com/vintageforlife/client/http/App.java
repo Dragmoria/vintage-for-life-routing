@@ -5,6 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.net.http.HttpResponse;
+import com.vintageforlife.client.homepage.Homepage;
+
 
 public class App extends Application {
 
@@ -21,6 +24,7 @@ public class App extends Application {
         Button createAccountButton = new Button("Create Account");
 
         // Handling voor loginButton
+        // Handling voor loginButton
         loginButton.setOnAction(event -> {
             String email = emailField.getText();
             String password = passwordField.getText();
@@ -29,12 +33,17 @@ public class App extends Application {
             boolean loginSuccessful = HttpService.validateLogin(email, password);
 
             if (loginSuccessful) {
-                showAlert(Alert.AlertType.INFORMATION, "Login Successful", "You have successfully logged in.");
-                // Voeg hier code toe om verder te gaan met de applicatie
+                // Haal de token op na een succesvolle login
+                String token = HttpService.getToken();
+
+                // Start de Homepage
+                Homepage homepage = new Homepage();
+                homepage.start(stage);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid email or password.");
             }
         });
+
 
         // Handling voor createAccountButton
         createAccountButton.setOnAction(event -> {
@@ -59,6 +68,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("Login Screen");
         stage.show();
+        scene.getStylesheets().add("/style.css");
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

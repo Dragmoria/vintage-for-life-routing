@@ -13,10 +13,9 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class HttpService {
+    private static String token;
 
-    private static String  token;
-
-    // Methode voor het valideren van een login
+    // Methode om de login te valideren en de token op te slaan
     public static boolean validateLogin(String email, String password) {
         HttpClient client = HttpClient.newHttpClient();
         Gson gson = new Gson();
@@ -40,7 +39,9 @@ public class HttpService {
             int statusCode = response.statusCode();
 
             if (statusCode == 200) {
-                // Login succesvol
+                // Login succesvol, sla de token op
+                token = response.body();
+                System.out.println("Login successful. Token: " + token);
                 return true;
             } else {
                 // Niet succesvolle login
@@ -51,6 +52,14 @@ public class HttpService {
             e.printStackTrace();
             return false;
         }
+    }
+    // Methode om de opgeslagen token op te halen
+    public static String getToken() {
+        return token;
+    }
+
+    public static String getResponseBody(HttpResponse<String> response) {
+        return response.body();
     }
 
     // Methode voor het aanmaken van een gebruiker
