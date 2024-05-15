@@ -14,6 +14,8 @@ public class TestRectangle {
 
     private Integer y;
 
+    private Boolean taken = false;
+
     public TestRectangle(Integer width, Integer length) {
         this.width = width;
         this.length = length;
@@ -26,11 +28,5 @@ public class TestRectangle {
         this.y = y;
     }
 
-    public boolean canFit(TestRectangle rectangle) {
-        return width >= rectangle.getWidth() && length >= rectangle.getLength();
-    }
 
-    public Integer getHighestPoint() {
-        return y + length;
-    }
 }

@@ -3,8 +3,7 @@ package com.vintageforlife.service;
 
 import com.vintageforlife.service.routing.genetic.Rectangle;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TestSomeThings {
     private Integer truckWidth;
@@ -15,71 +14,80 @@ public class TestSomeThings {
 
     private List<TestRectangle> itemsToAdd;
 
-    private List<TestRectangle> remainingSpaces;
+    private boolean[][] grid;
 
     public void test() {
-        truckWidth = 10;
-        truckLength = 15;
+        truckWidth = 1000;
+        truckLength = 1500;
+
+        grid = new boolean[truckWidth][truckLength];
 
         itemsToAdd = List.of(
-                new TestRectangle(1, 7),
-                new TestRectangle(2, 4),
-                new TestRectangle(3, 6),
-                new TestRectangle(4, 10),
-                new TestRectangle(2, 4),
-                new TestRectangle(3, 8),
-                new TestRectangle(1, 7),
-                new TestRectangle(3, 4)
+                new TestRectangle(100, 700),
+                new TestRectangle(200, 400),
+                new TestRectangle(300, 600),
+                new TestRectangle(400, 1000), // should be higher in y but it's not
+                new TestRectangle(200, 400),
+                new TestRectangle(300, 800),
+                new TestRectangle(100, 700),
+                new TestRectangle(300, 400)
         );
 
-        remainingSpaces = List.of(
-                new TestRectangle(truckWidth, truckLength, 0, 0),
-                new TestRectangle(truckWidth, truckLength, 0, 0)
-        );
+        addedItems = new ArrayList<>();
+
+        for (TestRectangle item : itemsToAdd) {
+            if (!addItem(item)) {
+                System.out.println("No place found for item: " + item);
+            }
+        }
     }
 
-    public void tryToAdd() {
-        for (TestRectangle item: itemsToAdd) {
-            for (TestRectangle remainingSpace: remainingSpaces) {
-                if (remainingSpace.canFit(item)) {
-                    item.setX(remainingSpace.getX());
-                    item.setY(remainingSpace.getY());
+    public boolean addItem(TestRectangle item) {
+        int itemWidth = item.getWidth() / 10; // convert cm to cells
+        int itemLength = item.getLength() / 10; // convert cm to cells
 
-                    addedItems.add(item);
-
-                    generateNewRemainingSpaces();
+        for (int j = 0; j <= truckLength / 10 - itemLength; j++) {
+            for (int i = 0; i <= truckWidth / 10 - itemWidth; i++) {
+                if (isAreaFree(i, j, itemWidth, itemLength)) {
+                    occupyArea(i, j, itemWidth, itemLength);
+                    addedItems.add(new TestRectangle(item.getWidth(), item.getLength(), i * 10, j * 10));
+                    int t = countOccupiedCells();
+                    return true;
                 }
             }
         }
+
+        return false; // no suitable place found
     }
 
-    private List<TestRectangle> columns;
-    private List<TestRectangle> rows;
-
-    public void generateNewRemainingSpaces() {
-        remainingSpaces = new ArrayList<>();
-        List<TestRectangle> addedItemsCopy = new ArrayList<>(addedItems);
-
-        columns = new ArrayList<>();
-        rows = new ArrayList<>();
-
-        for (TestRectangle item: addedItemsCopy) {
-            columns.add(createColumn(item));
-            rows.add(createRow(item));
-        }
-
-        for (TestRectangle row: rows) {
-            for (TestRectangle column: columns) {
-
+    public int countOccupiedCells() {
+        int count = 0;
+        for (int i = 0; i < truckWidth; i++) {
+            for (int j = 0; j < truckLength; j++) {
+                if (grid[i][j]) {
+                    count++;
+                }
             }
         }
+        return count;
     }
 
-    public TestRectangle createColumn(TestRectangle basedOn) {
-        return new TestRectangle(basedOn.getWidth(), truckLength, basedOn.getX(), 0);
+    private boolean isAreaFree(int startX, int startY, int width, int length) {
+        for (int i = startX; i < startX + width; i++) {
+            for (int j = startY; j < startY + length; j++) {
+                if (grid[i][j]) {
+                    return false; // cell is already occupied
+                }
+            }
+        }
+        return true;
     }
 
-    public TestRectangle createRow(TestRectangle basedOn) {
-        return new TestRectangle(truckWidth, basedOn.getLength(), 0, basedOn.getY());
+    private void occupyArea(int startX, int startY, int width, int length) {
+        for (int i = startX; i < startX + width; i++) {
+            for (int j = startY; j < startY + length; j++) {
+                grid[i][j] = true; // mark cell as occupied
+            }
+        }
     }
 }
