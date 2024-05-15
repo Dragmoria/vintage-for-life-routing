@@ -11,11 +11,8 @@ module com.vintageforlife.client {
     requires jakarta.validation;
     requires com.google.gson;
     requires org.apache.httpcomponents.httpcore;
-    requires lombok;
-
-
-
     requires org.kordamp.bootstrapfx.core;
+    requires javafx.web;
 
     opens com.vintageforlife.client.http to javafx.fxml;
     exports com.vintageforlife.client.http;
@@ -23,4 +20,11 @@ module com.vintageforlife.client {
     opens com.vintageforlife.client.homepage to javafx.fxml;
     exports com.vintageforlife.client.dto;
     opens com.vintageforlife.client.dto to javafx.fxml;
+    exports com.vintageforlife.client;
+    opens com.vintageforlife.client to javafx.fxml;
+    exports com.vintageforlife.client.enums;
+    opens com.vintageforlife.client.enums to javafx.fxml;
+
+
+
 }

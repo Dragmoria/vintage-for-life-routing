@@ -40,7 +40,8 @@ public class HttpService {
 
             if (statusCode == 200) {
                 // Login succesvol, sla de token op
-                token = response.body();
+                String responseBody = response.body();
+                setToken(responseBody); // Sla alleen het token op
                 System.out.println("Login successful. Token: " + token);
                 return true;
             } else {
@@ -53,9 +54,16 @@ public class HttpService {
             return false;
         }
     }
+
     // Methode om de opgeslagen token op te halen
     public static String getToken() {
         return token;
+    }
+
+    // Methode om alleen het token op te slaan zonder "access_token" label
+    private static void setToken(String responseBody) {
+        // Parse het token uit de respons en sla het op zonder "access_token" label
+        token = responseBody.substring(17); // Overslaan van "access_token": 17 tekens
     }
 
     public static String getResponseBody(HttpResponse<String> response) {

@@ -9,21 +9,22 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.List;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.vintageforlife.client.dto.RouteDTO;
 
 public class RouteService {
     private static final String BASE_URL = "http://localhost:8080/api/v1/routes";
 
-    // Methode om routes op te halen vanuit de backend
     public static List<RouteDTO> getRoutes() {
         HttpClient client = HttpClient.newHttpClient();
         Gson gson = new Gson();
+        String token = HttpService.getToken();
 
-        // Bouw het HTTP-verzoek
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
-                .header("Authorization", "Bearer " + HttpService.getToken()) // Voeg token toe aan header
+                .header("Authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJCYXNAZ21haWwuY29tIiwiaWF0IjoxNzE1Njk3MjYwLCJleHAiOjE3MTU3ODM2NjB9.2EZm23YM2tW9E5PM-isSYdj5W81XnRr3OVipvNVlPaY")
                 .GET()
                 .timeout(Duration.ofSeconds(10))
                 .build();
@@ -34,8 +35,12 @@ public class RouteService {
 
             if (statusCode == 200) {
                 // Succesvolle respons ontvangen, converteer naar lijst van Route-objecten
-                RouteDTO[] routesArray = gson.fromJson(response.body(), RouteDTO[].class);
-                return List.of(routesArray);
+//                RouteDTO[] routesArray = gson.fromJson(response.body(), RouteDTO[].class);
+//                return List.of(routesArray);
+
+                ObjectMapper mapper = new ObjectMapper();
+                List<RouteDTO> routes = mapper.readValue(response.body(), mapper.getTypeFactory().constructCollectionType(List.class, RouteDTO.class));
+                return routes;
             } else {
                 // Niet succesvolle respons
                 System.out.println("Failed to fetch routes. Status code: " + statusCode);
