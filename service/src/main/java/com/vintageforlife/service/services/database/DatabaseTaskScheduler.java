@@ -1,8 +1,12 @@
 package com.vintageforlife.service.services.database;
 
 import com.vintageforlife.service.dto.AddressDTO;
+import com.vintageforlife.service.dto.DistributionCenterDTO;
 import com.vintageforlife.service.dto.OrderDTO;
 import com.vintageforlife.service.dto.TransportSettingDTO;
+import com.vintageforlife.service.routing.Algorithm;
+import com.vintageforlife.service.routing.Problem;
+import com.vintageforlife.service.routing.Solution;
 import com.vintageforlife.service.services.googleApi.Matrix;
 import com.vintageforlife.service.services.googleApi.MatrixResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +28,8 @@ public class DatabaseTaskScheduler {
     private final TransportSettingService transportSettingService;
     private final Matrix matrix;
     private final OrderService orderService;
+    private final DistributionCenterService distributionCenterService;
+    private final Algorithm algorithm;
 
 
     @Autowired
@@ -30,11 +37,15 @@ public class DatabaseTaskScheduler {
             TaskScheduler taskScheduler,
             TransportSettingService transportSettingService,
             Matrix matrix,
-            OrderService orderService) {
+            OrderService orderService,
+            DistributionCenterService distributionCenterService,
+            Algorithm algorithm) {
         this.taskScheduler = taskScheduler;
         this.transportSettingService = transportSettingService;
         this.matrix = matrix;
         this.orderService = orderService;
+        this.distributionCenterService = distributionCenterService;
+        this.algorithm = algorithm;
     }
 
     public void scheduleDatabaseTasks() {
@@ -72,9 +83,33 @@ public class DatabaseTaskScheduler {
                 .distinct()
                 .toList();
 
-        List<String> formattedAddresses = uniqueAddresses.stream()
-                .map(address -> address.getStreet() + " " + address.getHouseNumber() + ", " + address.getPostCode() + " " + address.getCity() + ", Netherlands").toList();
+        List<String> formattedAddresses = new ArrayList<>(uniqueAddresses.stream()
+                .map(AddressDTO::toString).toList());
+
+        // get address from distribution center
+        DistributionCenterDTO distributionCenterDTO = distributionCenterService.getDistributionCenterById(1);
+
+        formattedAddresses.add(distributionCenterDTO.getAddress().toString());
 
         MatrixResponse matrixResponse = matrix.getMatrix(formattedAddresses);
+
+        Problem problem = new Problem(matrixResponse, orders, distributionCenterDTO.getAddress());
+
+        List<TransportSettingDTO> settings = transportSettingService.getTransportSettingsForDistributionCenter(1);
+
+
+        Float truckWidth = Float.parseFloat(settings.stream()
+                .filter(setting -> setting.getName().equals("truck_width"))
+                .map(TransportSettingDTO::getValue)
+                .findFirst()
+                .orElse("3"));
+
+        Float truckLength = Float.parseFloat(settings.stream()
+                .filter(setting -> setting.getName().equals("truck_depth"))
+                .map(TransportSettingDTO::getValue)
+                .findFirst()
+                .orElse("5"));
+
+        Solution solution = algorithm.solve(problem, truckWidth, truckLength);
     }
 }

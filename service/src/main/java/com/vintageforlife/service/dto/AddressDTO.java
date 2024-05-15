@@ -60,4 +60,9 @@ public class AddressDTO {
         result = 31 * result + city.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return street + " " + houseNumber + (extension != null ? extension : "") + ", " + postCode + " " + city + ", Netherlands";
+    }
 }
