@@ -24,4 +24,5 @@ public class UserMapper implements Mapper<UserEntity, UserDTO> {
                 .role(entity.getRole())
                 .build();
     }
+
 }
