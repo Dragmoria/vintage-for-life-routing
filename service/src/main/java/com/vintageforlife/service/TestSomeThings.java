@@ -3,6 +3,7 @@ package com.vintageforlife.service;
 
 import com.vintageforlife.service.routing.genetic.Rectangle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestSomeThings {
@@ -40,8 +41,45 @@ public class TestSomeThings {
     public void tryToAdd() {
         for (TestRectangle item: itemsToAdd) {
             for (TestRectangle remainingSpace: remainingSpaces) {
-                remainingSpace.canFit(item);
+                if (remainingSpace.canFit(item)) {
+                    item.setX(remainingSpace.getX());
+                    item.setY(remainingSpace.getY());
+
+                    addedItems.add(item);
+
+                    generateNewRemainingSpaces();
+                }
             }
         }
+    }
+
+    private List<TestRectangle> columns;
+    private List<TestRectangle> rows;
+
+    public void generateNewRemainingSpaces() {
+        remainingSpaces = new ArrayList<>();
+        List<TestRectangle> addedItemsCopy = new ArrayList<>(addedItems);
+
+        columns = new ArrayList<>();
+        rows = new ArrayList<>();
+
+        for (TestRectangle item: addedItemsCopy) {
+            columns.add(createColumn(item));
+            rows.add(createRow(item));
+        }
+
+        for (TestRectangle row: rows) {
+            for (TestRectangle column: columns) {
+
+            }
+        }
+    }
+
+    public TestRectangle createColumn(TestRectangle basedOn) {
+        return new TestRectangle(basedOn.getWidth(), truckLength, basedOn.getX(), 0);
+    }
+
+    public TestRectangle createRow(TestRectangle basedOn) {
+        return new TestRectangle(truckWidth, basedOn.getLength(), 0, basedOn.getY());
     }
 }

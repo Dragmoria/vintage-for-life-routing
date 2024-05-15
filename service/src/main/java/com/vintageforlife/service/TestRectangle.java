@@ -29,4 +29,8 @@ public class TestRectangle {
     public boolean canFit(TestRectangle rectangle) {
         return width >= rectangle.getWidth() && length >= rectangle.getLength();
     }
+
+    public Integer getHighestPoint() {
+        return y + length;
+    }
 }
