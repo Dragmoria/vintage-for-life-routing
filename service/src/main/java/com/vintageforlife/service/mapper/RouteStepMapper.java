@@ -40,6 +40,7 @@ public class RouteStepMapper implements Mapper<RouteStepEntity, RouteStepDTO>{
         orderDTO.setOrderItems(orderItemDTOList);
 
         return RouteStepDTO.builder()
+                .id(entity.getId())
                 .stepIndex(entity.getStepIndex())
                 .distanceKm(entity.getDistanceKm())
                 .completed(entity.getCompleted())

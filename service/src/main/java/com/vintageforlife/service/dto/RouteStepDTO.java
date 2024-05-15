@@ -12,6 +12,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class RouteStepDTO {
+    @NotNull(message = "Id can not be null")
+    @NonNull
+    private Integer id;
+
     @NotNull(message = "Step index can not be null")
     @Positive(message = "Step index should be positive")
     @NonNull

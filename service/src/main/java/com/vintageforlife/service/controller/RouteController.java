@@ -27,14 +27,6 @@ public class RouteController {
         this.routeService = routeService;
     }
 
-    @GetMapping(value = "/all", consumes = "application/json", produces = "application/json")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
-    public ResponseEntity<List<RouteDTO>> getAllRoutes() {
-        List<RouteDTO> routes = routeService.getAllRoutes();
-        return ResponseEntity.ok(routes);
-    }
-
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PLANNER', 'ROLE_CARRIER', 'ROLE_USER')")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
