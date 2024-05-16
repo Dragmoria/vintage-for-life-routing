@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class ServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
-        TestSomeThings testSomeThings = new TestSomeThings();
-        testSomeThings.test();
+//        TestSomeThings testSomeThings = new TestSomeThings();
+//        testSomeThings.test();
     }
 }

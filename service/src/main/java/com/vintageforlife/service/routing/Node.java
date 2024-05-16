@@ -2,7 +2,6 @@ package com.vintageforlife.service.routing;
 
 import com.vintageforlife.service.dto.AddressDTO;
 import com.vintageforlife.service.dto.OrderDTO;
-import com.vintageforlife.service.routing.genetic.Rectangle;
 import lombok.Getter;
 
 import java.util.*;
@@ -47,5 +46,17 @@ public class Node {
 
     public Integer getDistanceTo(Node node) {
         return edgeMap.get(node).getDistanceInMeters();
+    }
+
+    public Edge getShortestEdge(HashSet<Node> visitedNodes) {
+        edges.sort(Comparator.comparingInt(Edge::getDistanceInMeters));
+
+        for (Edge edge : edges) {
+            if (!visitedNodes.contains(edge.getTo())) {
+                return edge;
+            }
+        }
+
+        return null;
     }
 }

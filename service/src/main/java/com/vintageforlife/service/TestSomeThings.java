@@ -1,8 +1,5 @@
 package com.vintageforlife.service;
 
-
-import com.vintageforlife.service.routing.genetic.Rectangle;
-
 import java.util.*;
 
 public class TestSomeThings {
@@ -25,7 +22,7 @@ public class TestSomeThings {
         itemsToAdd = List.of(
                 new TestRectangle(100, 700),
                 new TestRectangle(200, 400),
-                new TestRectangle(300, 600),
+                new TestRectangle(200, 600),
                 new TestRectangle(400, 1000), // should be higher in y but it's not
                 new TestRectangle(200, 400),
                 new TestRectangle(300, 800),
@@ -35,11 +32,16 @@ public class TestSomeThings {
 
         addedItems = new ArrayList<>();
 
+        long startTime = System.currentTimeMillis();
+
         for (TestRectangle item : itemsToAdd) {
             if (!addItem(item)) {
                 System.out.println("No place found for item: " + item);
             }
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time: " + (endTime - startTime) + " ms");
     }
 
     public boolean addItem(TestRectangle item) {
@@ -51,25 +53,12 @@ public class TestSomeThings {
                 if (isAreaFree(i, j, itemWidth, itemLength)) {
                     occupyArea(i, j, itemWidth, itemLength);
                     addedItems.add(new TestRectangle(item.getWidth(), item.getLength(), i * 10, j * 10));
-                    int t = countOccupiedCells();
                     return true;
                 }
             }
         }
 
         return false; // no suitable place found
-    }
-
-    public int countOccupiedCells() {
-        int count = 0;
-        for (int i = 0; i < truckWidth; i++) {
-            for (int j = 0; j < truckLength; j++) {
-                if (grid[i][j]) {
-                    count++;
-                }
-            }
-        }
-        return count;
     }
 
     private boolean isAreaFree(int startX, int startY, int width, int length) {

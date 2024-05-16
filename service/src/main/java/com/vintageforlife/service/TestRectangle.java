@@ -27,6 +27,4 @@ public class TestRectangle {
         this.x = x;
         this.y = y;
     }
-
-
 }

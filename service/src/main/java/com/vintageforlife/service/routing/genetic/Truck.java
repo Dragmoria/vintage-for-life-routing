@@ -1,46 +1,82 @@
 package com.vintageforlife.service.routing.genetic;
 
+import com.vintageforlife.service.Rectangle;
+import com.vintageforlife.service.TestRectangle;
 import com.vintageforlife.service.dto.OrderItemDTO;
 import com.vintageforlife.service.routing.Node;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class Truck {
-    private Float truckWidth;
+    private final int truckWidth;
 
-    private Float truckLength;
+    private final int truckLength;
 
-    private Rectangle rectangle;
+    private final List<Rectangle> addedItems;
 
-    private List<OrderItemDTO> items;
+    private final List<OrderItemDTO> addedOrders;
 
-    private List<Rectangle> remainingSpaces;
+    private final boolean[][] grid;
 
     public Truck(Float truckWidth, Float truckLength) {
-        this.truckWidth = truckWidth;
-        this.truckLength = truckLength;
-        this.rectangle = new Rectangle(truckWidth, truckLength);
-        this.items = new ArrayList<>();
+        float width = truckWidth * 100;
+        float length = truckLength * 100;
+        this.truckWidth = Math.round(width);
+        this.truckLength = Math.round(length);
+
+        grid = new boolean[this.truckWidth][this.truckLength];
+
+        addedItems = new ArrayList<>();
+        addedOrders = new ArrayList<>();
     }
 
     public boolean addItem(OrderItemDTO orderItemDTO) {
-        Rectangle productRectangle = new Rectangle(orderItemDTO.getProduct().getWidth(), orderItemDTO.getProduct().getDepth());
+        Rectangle item = rectangleFromOrderItem(orderItemDTO);
 
-        // this needs to be done better for sure. currently it cant use the remaining length since i do max length minus max length for some reason. Also what if one of the items I add at the back are like really long? and and item could still fit next to it. I need to devide the spaces better.... HARD?? yes.... tomorrow
 
-        if (!rectangle.canFit(productRectangle)) {
-            rectangle = new Rectangle(truckWidth, truckLength - rectangle.getLength());
+        int itemWidth = item.getWidth() / 10; // convert cm to cells
+        int itemLength = item.getLength() / 10; // convert cm to cells
 
-            if(!rectangle.canFit(productRectangle)) {
-                return false;
+        for (int j = 0; j <= truckLength / 10 - itemLength; j++) {
+            for (int i = 0; i <= truckWidth / 10 - itemWidth; i++) {
+                if (isAreaFree(i, j, itemWidth, itemLength)) {
+                    occupyArea(i, j, itemWidth, itemLength);
+                    addedItems.add(new Rectangle(item.getWidth(), item.getLength(), i * 10, j * 10));
+                    addedOrders.add(orderItemDTO);
+                    return true;
+                }
             }
         }
 
-        items.add(orderItemDTO);
+        return false;
+    }
 
-        rectangle = new Rectangle(rectangle.getWidth() - productRectangle.getWidth(), truckLength);
+    private Rectangle rectangleFromOrderItem(OrderItemDTO orderItemDTO) {
+        int width = (int)(orderItemDTO.getProduct().getWidth() * 100);
+        int length = (int)(orderItemDTO.getProduct().getDepth() * 100);
 
+        return new Rectangle(width, length);
+    }
+
+    private boolean isAreaFree(int startX, int startY, int width, int length) {
+        for (int i = startX; i < startX + width; i++) {
+            for (int j = startY; j < startY + length; j++) {
+                if (grid[i][j]) {
+                    return false; // cell is already occupied
+                }
+            }
+        }
         return true;
+    }
+
+    private void occupyArea(int startX, int startY, int width, int length) {
+        for (int i = startX; i < startX + width; i++) {
+            for (int j = startY; j < startY + length; j++) {
+                grid[i][j] = true; // mark cell as occupied
+            }
+        }
     }
 }

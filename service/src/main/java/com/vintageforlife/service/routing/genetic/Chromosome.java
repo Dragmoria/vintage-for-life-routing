@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -20,32 +21,55 @@ public class Chromosome {
 
     private Integer fitness;
 
-    private Double distanceWeight = 0.5;
-
-    private Double truckCountWeight = 0.5;
-
     private Float truckWidth;
 
     private Float truckLength;
 
-    public Chromosome(List<Node> nodes, Float truckWidth, Float truckLength) {
+    private Map<OrderItemDTO, Node> itemNodeMap;
+
+    private int totalDistance;
+
+    private Node startAndEndNode;
+
+    public Chromosome(
+            List<Node> nodes,
+            Float truckWidth,
+            Float truckLength,
+            Map<OrderItemDTO, Node> itemNodeMap,
+            Node startAndEndNode) {
         this.nodes = nodes;
         this.truckWidth = truckWidth;
         this.truckLength = truckLength;
+        this.itemNodeMap = itemNodeMap;
+        this.startAndEndNode = startAndEndNode;
     }
 
-    public void calculateFitness() {
-        // create a list of trucks based on the items in the nodes. Every node has an order and every order has some order items.
-        // Each order item has a product and that producs has a width, a height and a depth.
-        // if the width or depth are bigger than the height we need to virtually rotate the product so the height is the biggest dimension
-        // then we add it to the truck as a 2d item with the width and depth as the dimensions
-        // then we add the next item to the truck trying to fit it in best. If it doesn't fit we add it to the next truck
+    public void calculateFitness(int maxTrucksUsed, int maxDistance, Double distanceWeight, Double trucksUsedWeight) {
+        createTrucks();
+        calculateDistanceOfTrucks();
 
-        // when we have created all trucks we calculate the total distance of all the trucks
-        // then we combine the total distance and the amount of trucks to create a fitness value
+        int distanceFitness = (int) (1 - (totalDistance / (double) maxDistance)) * 100;
+        int trucksUsedFitness = (int) (1 - (trucks.size() / (double) maxTrucksUsed)) * 100;
 
-        // the fitness value should be higher the less distance and the less trucks we use
+        fitness = (int) (distanceFitness * distanceWeight + trucksUsedFitness * trucksUsedWeight);
+    }
 
+    private void calculateDistanceOfTrucks() {
+        totalDistance = 0;
+
+        for (Truck truck: trucks) {
+            totalDistance += startAndEndNode.getDistanceTo(itemNodeMap.get(truck.getAddedOrders().getFirst()));
+
+            for (OrderItemDTO orderItem: truck.getAddedOrders()) {
+                Node node = itemNodeMap.get(orderItem);
+                totalDistance += node.getDistanceTo(node);
+            }
+
+            totalDistance += startAndEndNode.getDistanceTo(itemNodeMap.get(truck.getAddedOrders().getLast()));
+        }
+    }
+
+    private void createTrucks() {
         trucks = new ArrayList<>();
         Truck currentTruck = new Truck(truckWidth, truckLength);
         trucks.add(currentTruck);
@@ -54,20 +78,6 @@ public class Chromosome {
             OrderDTO order = node.getOrder();
 
             for (OrderItemDTO orderItem : order.getOrderItems()) {
-                ProductDTO product = orderItem.getProduct();
-
-                if (product.getDepth() > product.getHeight()) {
-                    product.setDepth(product.getHeight());
-                }
-
-                if (product.getWidth() > product.getHeight()) {
-                    product.setWidth(product.getHeight());
-                }
-
-                if (product.getWidth() > truckWidth || product.getDepth() > truckLength) {
-                    throw new RuntimeException("Product is too big for truck");
-                }
-
                 if (!currentTruck.addItem(orderItem)) {
                     currentTruck = new Truck(truckWidth, truckLength);
                     trucks.add(currentTruck);

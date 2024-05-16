@@ -15,7 +15,7 @@ public class Problem {
 
     private final Node startAndEndNode;
 
-    private int startEndNodeIndex;
+    private final int startEndNodeIndex;
 
     private final List<OrderDTO> orderDTOS;
 
@@ -31,27 +31,17 @@ public class Problem {
         startEndNodeIndex = matrixResponse.getOriginAddresses().indexOf(startAndEndAddress.toString());
         Row startEndRow = matrixResponse.getRows().get(startEndNodeIndex);
 
-        for (int i = 0; i < startEndRow.getElements().size(); i++) {
-            String toAddress = matrixResponse.getDestinationAddresses().get(i);
-
-            Node toNode = getNodeFromGraph(toAddress);
-
-            Integer distance = startEndRow.getElements().get(i).getDistance().getMeter();
-
-            Edge edge = new Edge(startAndEndNode, toNode, distance);
-
-            startAndEndNode.addEdge(edge);
-        }
-
-        createGraph();
-    }
-
-    private void createGraph() {
         for (OrderDTO orderDTO : orderDTOS) {
             Node node = new Node(orderDTO);
             graph.add(node);
         }
 
+        graph.add(startAndEndNode);
+
+        createGraph();
+    }
+
+    private void createGraph() {
         for (Node node : graph) {
             Row row = matrixResponse.getRows().get(matrixResponse.getOriginAddresses().indexOf(node.getAddressDTO().toString()));
 
@@ -74,39 +64,7 @@ public class Problem {
 
                 node.addEdge(edge);
             }
-
-//            Integer startEndNodeDistance = row.getElements().get(startEndNodeIndex).getDistance().getMeter();
-//
-//            Edge startEndEdge = new Edge(node, startAndEndNode, startEndNodeDistance);
-//
-//            node.addEdge(startEndEdge);
         }
-
-//        for (int i = 0; i < matrixResponse.getRows().size(); i++) {
-//            Row row = matrixResponse.getRows().get(i);
-//
-//            String fromAddress = matrixResponse.getOriginAddresses().get(i);
-//
-//            Node fromNode = getNodeFromGraph(fromAddress);
-//
-//            for (int j = 0; j < row.getElements().size(); j++) {
-//                String toAddress = matrixResponse.getDestinationAddresses().get(j);
-//
-//                Node toNode = getNodeFromGraph(toAddress);
-//
-//                Integer distance = row.getElements().get(j).getDistance().getMeter();
-//
-//                Edge edge = new Edge(fromNode, toNode, distance);
-//
-//                fromNode.addEdge(edge);
-//            }
-//
-//            Integer startEndNodeDistance = row.getElements().get(startEndNodeIndex).getDistance().getMeter();
-//
-//            Edge startEndEdge = new Edge(fromNode, startAndEndNode, startEndNodeDistance);
-//
-//            fromNode.addEdge(startEndEdge);
-//        }
     }
 
     private Node getNodeFromGraph(String fromAddress) {

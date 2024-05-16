@@ -1,9 +1,6 @@
 package com.vintageforlife.service.services.database;
 
-import com.vintageforlife.service.dto.AddressDTO;
-import com.vintageforlife.service.dto.DistributionCenterDTO;
-import com.vintageforlife.service.dto.OrderDTO;
-import com.vintageforlife.service.dto.TransportSettingDTO;
+import com.vintageforlife.service.dto.*;
 import com.vintageforlife.service.routing.Algorithm;
 import com.vintageforlife.service.routing.Problem;
 import com.vintageforlife.service.routing.Solution;
@@ -78,6 +75,42 @@ public class DatabaseTaskScheduler {
     private void runAlgorithm() {
         List<OrderDTO> orders = orderService.getAllOrdersFromLast24Hours();
 
+
+
+        List<TransportSettingDTO> settings = transportSettingService.getTransportSettingsForDistributionCenter(1);
+
+
+        float truckWidth = Float.parseFloat(settings.stream()
+                .filter(setting -> setting.getName().equals("truck_width"))
+                .map(TransportSettingDTO::getValue)
+                .findFirst()
+                .orElse("3"));
+
+        float truckLength = Float.parseFloat(settings.stream()
+                .filter(setting -> setting.getName().equals("truck_depth"))
+                .map(TransportSettingDTO::getValue)
+                .findFirst()
+                .orElse("5"));
+
+        for (OrderDTO order : orders) {
+            order.getOrderItems().forEach(orderItem -> {
+                orderItem.setOrder(order);
+                ProductDTO product = orderItem.getProduct();
+
+                if (product.getDepth() > product.getHeight()) {
+                    product.setDepth(product.getHeight());
+                }
+
+                if (product.getWidth() > product.getHeight()) {
+                    product.setWidth(product.getHeight());
+                }
+
+                if (product.getWidth() > truckWidth || product.getDepth() > truckLength) {
+                    throw new RuntimeException("Product is too big for truck");
+                }
+            });
+        }
+
         List<AddressDTO> uniqueAddresses = orders.stream()
                 .map(OrderDTO::getAddress)
                 .distinct()
@@ -94,21 +127,6 @@ public class DatabaseTaskScheduler {
         MatrixResponse matrixResponse = matrix.getMatrix(formattedAddresses);
 
         Problem problem = new Problem(matrixResponse, orders, distributionCenterDTO.getAddress());
-
-        List<TransportSettingDTO> settings = transportSettingService.getTransportSettingsForDistributionCenter(1);
-
-
-        Float truckWidth = Float.parseFloat(settings.stream()
-                .filter(setting -> setting.getName().equals("truck_width"))
-                .map(TransportSettingDTO::getValue)
-                .findFirst()
-                .orElse("3"));
-
-        Float truckLength = Float.parseFloat(settings.stream()
-                .filter(setting -> setting.getName().equals("truck_depth"))
-                .map(TransportSettingDTO::getValue)
-                .findFirst()
-                .orElse("5"));
 
         Solution solution = algorithm.solve(problem, truckWidth, truckLength);
     }
