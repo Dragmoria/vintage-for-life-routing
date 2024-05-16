@@ -29,7 +29,6 @@ public class Problem {
         this.graph = new ArrayList<>();
 
         startEndNodeIndex = matrixResponse.getOriginAddresses().indexOf(startAndEndAddress.toString());
-        Row startEndRow = matrixResponse.getRows().get(startEndNodeIndex);
 
         for (OrderDTO orderDTO : orderDTOS) {
             Node node = new Node(orderDTO);

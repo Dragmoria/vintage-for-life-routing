@@ -1,9 +1,6 @@
 package com.vintageforlife.service.routing.genetic;
 
-import com.vintageforlife.service.Rectangle;
-import com.vintageforlife.service.TestRectangle;
 import com.vintageforlife.service.dto.OrderItemDTO;
-import com.vintageforlife.service.routing.Node;
 import lombok.Getter;
 
 import java.util.ArrayList;

@@ -50,14 +50,12 @@ public class DatabaseTaskScheduler {
 
         List<TransportSettingDTO> transportSettings = transportSettingService.getTransportSettingsForDistributionCenter(1);
 
-        Optional<TransportSettingDTO> cronTime = transportSettingService.getTransportSettingsForDistributionCenter(1)
+        Optional<TransportSettingDTO> cronTime = transportSettings
                 .stream()
                 .filter(transportSettingDTO -> transportSettingDTO.getName().equals("cron_ts_routing"))
                 .findFirst();
 
         if (cronTime.isPresent()) {
-            String temp = cronTime.get().getValue();
-
             CronTrigger cronTrigger = new CronTrigger(cronTime.get().getValue());
 
             taskScheduler.schedule(task, cronTrigger);

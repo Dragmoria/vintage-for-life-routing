@@ -2,9 +2,7 @@ package com.vintageforlife.service.routing.genetic;
 
 import com.vintageforlife.service.dto.OrderDTO;
 import com.vintageforlife.service.dto.OrderItemDTO;
-import com.vintageforlife.service.dto.ProductDTO;
 import com.vintageforlife.service.routing.Node;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

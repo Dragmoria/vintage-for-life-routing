@@ -1,4 +1,4 @@
-package com.vintageforlife.service;
+package com.vintageforlife.service.routing.genetic;
 
 import lombok.Getter;
 import lombok.Setter;
