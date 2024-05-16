@@ -59,4 +59,8 @@ public class Node {
 
         return null;
     }
+
+    public Integer getDurationTo(Node node) {
+        return edgeMap.get(node).getDurationInSeconds();
+    }
 }

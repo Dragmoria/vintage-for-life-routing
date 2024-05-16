@@ -29,7 +29,6 @@ public class RouteStepDTO {
     @NotNull(message = "Route can not be null")
     private RouteDTO route;
 
-    @NonNull
     @NotNull(message = "Order can not be null")
     private OrderDTO order;
 }

@@ -10,4 +10,6 @@ public interface RouteService {
     List<RouteDTO> getAllRoutes();
 
     List<RouteDTO> getRoutesForUser(String email);
+
+    void saveNewRoute(RouteDTO routeDTO);
 }

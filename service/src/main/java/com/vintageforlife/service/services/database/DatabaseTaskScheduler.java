@@ -2,8 +2,11 @@ package com.vintageforlife.service.services.database;
 
 import com.vintageforlife.service.dto.*;
 import com.vintageforlife.service.routing.Algorithm;
+import com.vintageforlife.service.routing.Node;
 import com.vintageforlife.service.routing.Problem;
 import com.vintageforlife.service.routing.Solution;
+import com.vintageforlife.service.routing.genetic.AlgorithmSettings;
+import com.vintageforlife.service.routing.genetic.Truck;
 import com.vintageforlife.service.services.googleApi.Matrix;
 import com.vintageforlife.service.services.googleApi.MatrixResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ public class DatabaseTaskScheduler {
     private final OrderService orderService;
     private final DistributionCenterService distributionCenterService;
     private final Algorithm algorithm;
+    private final RouteService routeService;
 
 
     @Autowired
@@ -36,13 +40,15 @@ public class DatabaseTaskScheduler {
             Matrix matrix,
             OrderService orderService,
             DistributionCenterService distributionCenterService,
-            Algorithm algorithm) {
+            Algorithm algorithm,
+            RouteService routeService) {
         this.taskScheduler = taskScheduler;
         this.transportSettingService = transportSettingService;
         this.matrix = matrix;
         this.orderService = orderService;
         this.distributionCenterService = distributionCenterService;
         this.algorithm = algorithm;
+        this.routeService = routeService;
     }
 
     public void scheduleDatabaseTasks() {
@@ -71,25 +77,51 @@ public class DatabaseTaskScheduler {
     }
 
     private void runAlgorithm() {
-        List<OrderDTO> orders = orderService.getAllOrdersFromLast24Hours();
-
-
+//        List<OrderDTO> orders = orderService.getAllOrdersFromLast24Hours();
+        List<OrderDTO> orders = orderService.getAllOrders();
+        if (orders.isEmpty()) return;
 
         List<TransportSettingDTO> settings = transportSettingService.getTransportSettingsForDistributionCenter(1);
+        AlgorithmSettings algorithmSettings = new AlgorithmSettings(settings);
 
+        rotateProducts(orders, algorithmSettings);
 
-        float truckWidth = Float.parseFloat(settings.stream()
-                .filter(setting -> setting.getName().equals("truck_width"))
-                .map(TransportSettingDTO::getValue)
-                .findFirst()
-                .orElse("3"));
+        List<AddressDTO> uniqueAddresses = getUniqueAdresses(orders);
+        List<String> formattedAddresses = getFormattedAdresses(uniqueAddresses);
+        DistributionCenterDTO distributionCenterDTO = distributionCenterService.getDistributionCenterById(1);
+        formattedAddresses.add(distributionCenterDTO.getAddress().toString());
 
-        float truckLength = Float.parseFloat(settings.stream()
-                .filter(setting -> setting.getName().equals("truck_depth"))
-                .map(TransportSettingDTO::getValue)
-                .findFirst()
-                .orElse("5"));
+        MatrixResponse matrixResponse = matrix.getMatrix(formattedAddresses);
 
+        Problem problem = new Problem(matrixResponse, orders, distributionCenterDTO.getAddress());
+
+        Solution solution = algorithm.solve(problem, algorithmSettings);
+        saveRoutes(solution);
+    }
+
+    private void saveRoutes(Solution solution) {
+        List<RouteDTO> routeDTOS = solution.chromosome().getRoutes();
+
+        for (RouteDTO route: routeDTOS) {
+            routeService.saveNewRoute(route);
+        }
+    }
+
+    private List<String> getFormattedAdresses(List<AddressDTO> uniqueAddresses) {
+        List<String> formattedAddresses = new ArrayList<>(uniqueAddresses.stream()
+                .map(AddressDTO::toString).toList());
+
+        return formattedAddresses;
+    }
+
+    private List<AddressDTO> getUniqueAdresses(List<OrderDTO> orders) {
+        return orders.stream()
+                .map(OrderDTO::getAddress)
+                .distinct()
+                .toList();
+    }
+
+    private void rotateProducts(List<OrderDTO> orders, AlgorithmSettings algorithmSettings) {
         for (OrderDTO order : orders) {
             order.getOrderItems().forEach(orderItem -> {
                 orderItem.setOrder(order);
@@ -103,29 +135,10 @@ public class DatabaseTaskScheduler {
                     product.setWidth(product.getHeight());
                 }
 
-                if (product.getWidth() > truckWidth || product.getDepth() > truckLength) {
+                if (product.getWidth() > algorithmSettings.getTruckWidth() || product.getDepth() > algorithmSettings.getTruckLength()) {
                     throw new RuntimeException("Product is too big for truck");
                 }
             });
         }
-
-        List<AddressDTO> uniqueAddresses = orders.stream()
-                .map(OrderDTO::getAddress)
-                .distinct()
-                .toList();
-
-        List<String> formattedAddresses = new ArrayList<>(uniqueAddresses.stream()
-                .map(AddressDTO::toString).toList());
-
-        // get address from distribution center
-        DistributionCenterDTO distributionCenterDTO = distributionCenterService.getDistributionCenterById(1);
-
-        formattedAddresses.add(distributionCenterDTO.getAddress().toString());
-
-        MatrixResponse matrixResponse = matrix.getMatrix(formattedAddresses);
-
-        Problem problem = new Problem(matrixResponse, orders, distributionCenterDTO.getAddress());
-
-        Solution solution = algorithm.solve(problem, truckWidth, truckLength);
     }
 }

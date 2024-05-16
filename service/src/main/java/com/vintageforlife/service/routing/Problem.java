@@ -38,6 +38,8 @@ public class Problem {
         graph.add(startAndEndNode);
 
         createGraph();
+
+        graph.remove(startAndEndNode);
     }
 
     private void createGraph() {
@@ -59,7 +61,9 @@ public class Problem {
 
                 Integer distance = row.getElements().get(i).getDistance().getMeter();
 
-                Edge edge = new Edge(node, toNode, distance);
+                Integer duration = row.getElements().get(i).getDuration().getSeconds();
+
+                Edge edge = new Edge(node, toNode, distance, duration);
 
                 node.addEdge(edge);
             }
