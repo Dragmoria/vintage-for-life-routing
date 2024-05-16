@@ -4,7 +4,6 @@ import com.vintageforlife.client.dto.CustomerDTO;
 import com.vintageforlife.client.dto.OrderDTO;
 import com.vintageforlife.client.dto.RouteDTO;
 import com.vintageforlife.client.dto.RouteStepDTO;
-import com.vintageforlife.client.dto.AddressDTO;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,6 +25,9 @@ public class RouteViewer {
     public Scene createScene(String token, int routeId) {
         // Haal routes op vanuit de backend met het meegegeven token
         List<RouteDTO> routes = RouteService.getRoutes();
+
+        // Debug-uitvoer om de ontvangen routes te bekijken
+        System.out.println("Received routes: " + routes);
 
         // Zoek de route met de gegeven ID
         Optional<RouteDTO> optionalRoute = routes.stream().filter(route -> route.getId() == routeId).findFirst();
@@ -89,12 +91,7 @@ public class RouteViewer {
             statusBox.setAlignment(Pos.CENTER_LEFT);
             Label retourLabel = new Label("Retour: " + order.getRetour());
             Button completeButton = new Button("Complete");
-//            completeButton.setOnAction(event -> {
-//                // Hier kun je de logica toevoegen om de status naar "completed" te zetten
-//                // Voor nu laten we het gewoon afdrukken
-//                System.out.println("Order completed: " + order.getId());
-//            });
-//            statusBox.getChildren().addAll(retourLabel, completeButton);
+            statusBox.getChildren().addAll(retourLabel, completeButton);
             sidePanel.getChildren().add(statusBox);
         }
 

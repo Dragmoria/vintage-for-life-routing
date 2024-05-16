@@ -9,9 +9,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.List;
 import java.util.ArrayList;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.vintageforlife.client.dto.RouteDTO;
 
 public class RouteService {
@@ -19,12 +17,13 @@ public class RouteService {
 
     public static List<RouteDTO> getRoutes() {
         HttpClient client = HttpClient.newHttpClient();
-        Gson gson = new Gson();
+
+        // Haal het token op
         String token = HttpService.getToken();
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
-                .header("Authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJCYXNAZ21haWwuY29tIiwiaWF0IjoxNzE1Njk3MjYwLCJleHAiOjE3MTU3ODM2NjB9.2EZm23YM2tW9E5PM-isSYdj5W81XnRr3OVipvNVlPaY")
+                .header("Authorization", "Bearer " + token) // Gebruik het opgehaalde token
                 .GET()
                 .timeout(Duration.ofSeconds(10))
                 .build();
@@ -35,12 +34,13 @@ public class RouteService {
 
             if (statusCode == 200) {
                 // Succesvolle respons ontvangen, converteer naar lijst van Route-objecten
-//                RouteDTO[] routesArray = gson.fromJson(response.body(), RouteDTO[].class);
-//                return List.of(routesArray);
-
                 ObjectMapper mapper = new ObjectMapper();
                 List<RouteDTO> routes = mapper.readValue(response.body(), mapper.getTypeFactory().constructCollectionType(List.class, RouteDTO.class));
                 return routes;
+            } else if (statusCode == 403) {
+                // Ongeautoriseerde toegang, token is mogelijk verlopen of ongeldig
+                System.out.println("Unauthorized access. Please check your authentication token.");
+                return new ArrayList<>(); // Geef een lege lijst terug
             } else {
                 // Niet succesvolle respons
                 System.out.println("Failed to fetch routes. Status code: " + statusCode);
