@@ -1,5 +1,6 @@
 package com.vintageforlife.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class OrderDTO {
+    @JsonIgnore
+    @NonNull
+    private Integer id;
+
     @NotNull(message = "Customer can not be null")
     private CustomerDTO customer;
 

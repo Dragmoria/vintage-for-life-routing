@@ -36,4 +36,11 @@ public class DistributionCenterService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public DistributionCenterDTO getDistributionCenterById(Integer id) {
+        DistributionCenterEntity distributionCenterEntity = distributionCenterRepository.findById(id).orElseThrow();
+        DistributionCenterDTO distributionCenterDTO = distributionCenterMapper.toDTO(distributionCenterEntity);
+        distributionCenterDTO.setAddress(addressMapper.toDTO(distributionCenterEntity.getAddress()));
+        return distributionCenterDTO;
+    }
 }

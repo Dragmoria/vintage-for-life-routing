@@ -24,6 +24,15 @@ public class RouteStepMapper implements Mapper<RouteStepEntity, RouteStepDTO>{
 
     @Override
     public RouteStepEntity toEntity(RouteStepDTO dto) {
+        if (dto.getOrder() == null) {
+            return RouteStepEntity.builder()
+                    .stepIndex(dto.getStepIndex())
+                    .distanceKm(dto.getDistanceKm())
+                    .completed(dto.getCompleted())
+                    .route(routeMapper.toEntity(dto.getRoute()))
+                    .build();
+        }
+
         return RouteStepEntity.builder()
                 .stepIndex(dto.getStepIndex())
                 .distanceKm(dto.getDistanceKm())
@@ -35,6 +44,15 @@ public class RouteStepMapper implements Mapper<RouteStepEntity, RouteStepDTO>{
 
     @Override
     public RouteStepDTO toDTO(RouteStepEntity entity) {
+        if (entity.getOrder() == null) {
+            return RouteStepDTO.builder()
+                    .stepIndex(entity.getStepIndex())
+                    .distanceKm(entity.getDistanceKm())
+                    .completed(entity.getCompleted())
+                    .route(routeMapper.toDTO(entity.getRoute()))
+                    .build();
+        }
+
         List<OrderItemDTO> orderItemDTOList = entity.getOrder().getOrderItems().stream().map(orderItemMapper::toDTO).toList();
         OrderDTO orderDTO = orderMapper.toDTO(entity.getOrder());
         orderDTO.setOrderItems(orderItemDTOList);
