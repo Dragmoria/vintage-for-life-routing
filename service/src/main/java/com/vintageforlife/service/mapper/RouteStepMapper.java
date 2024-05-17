@@ -3,7 +3,9 @@ package com.vintageforlife.service.mapper;
 import com.vintageforlife.service.dto.OrderDTO;
 import com.vintageforlife.service.dto.OrderItemDTO;
 import com.vintageforlife.service.dto.RouteStepDTO;
+import com.vintageforlife.service.entity.OrderEntity;
 import com.vintageforlife.service.entity.RouteStepEntity;
+import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,27 +44,24 @@ public class RouteStepMapper implements Mapper<RouteStepEntity, RouteStepDTO>{
                 .build();
     }
 
+    private List<OrderEntity> requestedOrders;
+
     @Override
     public RouteStepDTO toDTO(RouteStepEntity entity) {
         if (entity.getOrder() == null) {
             return RouteStepDTO.builder()
+                    .id(entity.getId())
                     .stepIndex(entity.getStepIndex())
                     .distanceKm(entity.getDistanceKm())
                     .completed(entity.getCompleted())
-                    .route(routeMapper.toDTO(entity.getRoute()))
                     .build();
         }
-
-        List<OrderItemDTO> orderItemDTOList = entity.getOrder().getOrderItems().stream().map(orderItemMapper::toDTO).toList();
-        OrderDTO orderDTO = orderMapper.toDTO(entity.getOrder());
-        orderDTO.setOrderItems(orderItemDTOList);
 
         return RouteStepDTO.builder()
                 .id(entity.getId())
                 .stepIndex(entity.getStepIndex())
                 .distanceKm(entity.getDistanceKm())
                 .completed(entity.getCompleted())
-                .order(orderDTO)
                 .build();
 
     }

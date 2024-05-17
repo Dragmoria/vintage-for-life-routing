@@ -37,8 +37,8 @@ public class OrderEntity {
     @NonNull
     private Boolean retour;
 
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RouteStepEntity routeStep;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<RouteStepEntity> routeStep;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItemEntity> orderItems;

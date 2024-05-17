@@ -6,6 +6,7 @@ import com.vintageforlife.service.entity.OrderEntity;
 import com.vintageforlife.service.entity.RouteEntity;
 import com.vintageforlife.service.entity.RouteStepEntity;
 import com.vintageforlife.service.entity.UserEntity;
+import com.vintageforlife.service.mapper.OrderMapper;
 import com.vintageforlife.service.mapper.RouteMapper;
 import com.vintageforlife.service.mapper.RouteStepMapper;
 import com.vintageforlife.service.repository.RouteRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -25,14 +27,16 @@ public class DefaultRouteService implements RouteService {
     private final UserRepository userRepository;
     private final RouteStepMapper routeStepMapper;
     private final OrderService orderService;
+    private final OrderMapper orderMapper;
 
     @Autowired
-    public DefaultRouteService(RouteRepository routeRepository, RouteMapper routeMapper, UserRepository userRepository, RouteStepMapper routeStepMapper, OrderService orderService ) {
+    public DefaultRouteService(RouteRepository routeRepository, RouteMapper routeMapper, UserRepository userRepository, RouteStepMapper routeStepMapper, OrderService orderService, OrderMapper orderMapper) {
         this.routeRepository = routeRepository;
         this.routeMapper = routeMapper;
         this.userRepository = userRepository;
         this.routeStepMapper = routeStepMapper;
         this.orderService = orderService;
+        this.orderMapper = orderMapper;
     }
 
     @Override
@@ -59,7 +63,17 @@ public class DefaultRouteService implements RouteService {
                     RouteDTO routeDTO = routeMapper.toDTO(routeEntity);
 
                     routeDTO.setRouteSteps(routeEntity.getRouteSteps().stream()
-                            .map(routeStepMapper::toDTO)
+                            .map(routeStepEntity -> {
+                                RouteStepDTO routeStepDTO = routeStepMapper.toDTO(routeStepEntity);
+
+                                // Load the OrderEntity and set it on the RouteStepDTO
+                                if (routeStepEntity.getOrder() != null) {
+                                    OrderEntity orderEntity = orderService.getOrderEntity(routeStepEntity.getOrder().getId());
+                                    routeStepDTO.setOrder(orderMapper.toDTO(orderEntity));
+                                }
+
+                                return routeStepDTO;
+                            })
                             .collect(Collectors.toList()));
 
                     return routeDTO;
