@@ -56,6 +56,11 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
+    public OrderEntity getOrderEntity(Integer id) {
+        return orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Order with id " + id + " does not exist"));
+    }
+
+    @Override
     public List<OrderDTO> getOrdersForDay(Date date) {
         return orderRepository.findByDate(date).stream()
                 .map(orderEntity -> {

@@ -36,7 +36,8 @@ public class RouteStepEntity {
     @NonNull
     private RouteEntity route;
 
-    @OneToOne(fetch = FetchType.LAZY)
+//    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ROUTE_STEP_TO_ORDER_ID"))
     private OrderEntity order;
 }

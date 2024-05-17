@@ -31,6 +31,7 @@ public class OrderMapper implements Mapper<OrderEntity, OrderDTO> {
         return OrderDTO.builder()
                 .customer(customerMapper.toDTO(entity.getCustomer()))
                 .address(addressMapper.toDTO(entity.getAddress()))
+                .id(entity.getId())
                 .date(entity.getDate())
                 .retour(entity.getRetour())
                 .build();
