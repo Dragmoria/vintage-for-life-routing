@@ -94,7 +94,7 @@ public class Chromosome {
 
             int durationPlusEnd = duration + startAndEndNode.getDurationTo(node);
 
-            if (durationPlusEnd > 8 * 60 * 60) {
+            if (durationPlusEnd > 6 * 60 * 60) {
                 currentTruck = new Truck(truckWidth, truckLength);
                 trucks.add(currentTruck);
                 duration = 0;
@@ -147,7 +147,16 @@ public class Chromosome {
                 routeStepDTO.setDistanceKm(lastNode.getDistanceTo(currentNode) / 1000f);
 
                 routeStepDTOS.add(routeStepDTO);
+
+                if (lastNode.getOrder() != null) {
+                    if (lastNode.getOrder().equals(currentNode.getOrder())) {
+                        continue;
+                    }
+                }
+
                 totalDistanceInKm += routeStepDTO.getDistanceKm();
+
+                lastNode = currentNode;
             }
 
             currentStepIndex++;
