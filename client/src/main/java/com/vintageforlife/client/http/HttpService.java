@@ -10,21 +10,30 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vintageforlife.client.dto.UserDTO;
 
 public class HttpService {
     private static String token;
+    private static UserDTO currentUser;
 
     // Methode om de login te valideren en de token op te slaan
     public static boolean validateLogin(String email, String password) {
         HttpClient client = HttpClient.newHttpClient();
-        Gson gson = new Gson();
+        ObjectMapper mapper = new ObjectMapper();
 
         // Maak het JSON-verzoek
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("email", email);
         requestBody.put("password", password);
-        String requestJson = gson.toJson(requestBody);
+        String requestJson;
+        try {
+            requestJson = mapper.writeValueAsString(requestBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
         // Bouw het HTTP-verzoek
         HttpRequest request = HttpRequest.newBuilder()
@@ -41,8 +50,13 @@ public class HttpService {
             if (statusCode == 200) {
                 // Login succesvol, sla de token op
                 String responseBody = response.body();
-                setToken(responseBody); // Sla alleen het token op
+                JsonNode jsonNode = mapper.readTree(responseBody);
+                setToken(jsonNode.get("access_token").asText()); // Parse het token correct
                 System.out.println("Login successful. Token: " + token);
+
+                // Haal de huidige gebruiker op
+                fetchCurrentUser();
+
                 return true;
             } else {
                 // Niet succesvolle login
@@ -60,10 +74,38 @@ public class HttpService {
         return token;
     }
 
-    // Methode om alleen het token op te slaan zonder "access_token" label
-    private static void setToken(String responseBody) {
-        // Parse het token uit de respons en sla het op zonder "access_token" label
-        token = responseBody.substring(17); // Overslaan van "access_token": 17 tekens
+    // Methode om de token op te slaan
+    private static void setToken(String token) {
+        HttpService.token = token;
+    }
+
+    // Methode om de huidige gebruiker op te halen
+    public static UserDTO getCurrentUser() {
+        return currentUser;
+    }
+
+    private static void fetchCurrentUser() {
+        HttpClient client = HttpClient.newHttpClient();
+        ObjectMapper mapper = new ObjectMapper();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/v1/user/info"))
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .timeout(Duration.ofSeconds(10))
+                .build();
+
+        try {
+            System.out.println("Fetching user info with token: " + token);
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                currentUser = mapper.readValue(response.body(), UserDTO.class);
+                System.out.println("User info fetched successfully: " + currentUser.getName());
+            } else {
+                System.out.println("Failed to fetch user info. Status code: " + response.statusCode() + ", Body: " + response.body());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getResponseBody(HttpResponse<String> response) {
@@ -73,7 +115,7 @@ public class HttpService {
     // Methode voor het aanmaken van een gebruiker
     public static boolean createUser(String name, String email, String password, String role) {
         HttpClient client = HttpClient.newHttpClient();
-        Gson gson = new Gson();
+        ObjectMapper mapper = new ObjectMapper();
 
         // Maak het JSON-verzoek
         Map<String, String> requestBody = new HashMap<>();
@@ -81,7 +123,13 @@ public class HttpService {
         requestBody.put("email", email);
         requestBody.put("password", password);
         requestBody.put("role", role);
-        String requestJson = gson.toJson(requestBody);
+        String requestJson;
+        try {
+            requestJson = mapper.writeValueAsString(requestBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
         // Log de JSON-inhoud die wordt verzonden
         System.out.println("Request JSON for createUser: " + requestJson);
@@ -119,5 +167,4 @@ public class HttpService {
             return false;
         }
     }
-
 }

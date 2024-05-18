@@ -7,14 +7,14 @@
     -fx-text-fill: #000000;
 }
 
-/* Stijlen voor de route-informatie en knoppen */
-.grid-pane {
+/* Stijlen voor de route-tabel */
+.table-view {
     -fx-padding: 20px;
+    -fx-font-size: 14px;
 }
 
-.label-route-info {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
+.table-column {
+    -fx-font-size: 14px;
 }
 
 .button {
@@ -22,7 +22,6 @@
     -fx-text-fill: white;
     -fx-padding: 5px 10px;
     -fx-border-radius: 5px;
-    -fx-margin-bottom: 10px;
 }
 
 .button:hover {
@@ -32,3 +31,13 @@
 .button:pressed {
     -fx-background-color: #0056b3;
 }
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.icon-button .icon {
+    font-size: 18px;
+}
+

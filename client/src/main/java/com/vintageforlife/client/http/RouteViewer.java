@@ -5,12 +5,10 @@ import com.vintageforlife.client.dto.OrderDTO;
 import com.vintageforlife.client.dto.RouteDTO;
 import com.vintageforlife.client.dto.RouteStepDTO;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -56,7 +54,8 @@ public class RouteViewer {
 
             // Voeg zijpaneel toe voor route-stappen en klantinformatie
             VBox sidePanel = createSidePanel(route.getRouteSteps());
-            root.setRight(sidePanel);
+            ScrollPane scrollPane = new ScrollPane(sidePanel);
+            root.setRight(scrollPane);
 
         } else {
             // Als de route niet wordt gevonden, voeg een label toe dat de route niet is gevonden
@@ -76,23 +75,28 @@ public class RouteViewer {
         // Loop door elke route-stap
         for (RouteStepDTO routeStep : routeSteps) {
             OrderDTO order = routeStep.getOrder();
-            CustomerDTO customer = order.getCustomer();
+            CustomerDTO customer = order != null ? order.getCustomer() : null;
 
             // Maak label voor route-stap
             Label routeStepLabel = new Label("Route Step ID: " + routeStep.getStepIndex());
             sidePanel.getChildren().add(routeStepLabel);
 
-            // Toon klantinformatie
-            Label customerInfoLabel = new Label("Customer: " + customer.getName());
-            sidePanel.getChildren().add(customerInfoLabel);
+            // Toon klantinformatie, indien beschikbaar
+            if (customer != null) {
+                Label customerInfoLabel = new Label("Customer: " + customer.getName());
+                sidePanel.getChildren().add(customerInfoLabel);
+            } else {
+                sidePanel.getChildren().add(new Label("Customer: N/A"));
+            }
 
-            // Toon retourstatus en knop om status te wijzigen naar "completed"
-            HBox statusBox = new HBox();
-            statusBox.setAlignment(Pos.CENTER_LEFT);
-            Label retourLabel = new Label("Retour: " + order.getRetour());
-            Button completeButton = new Button("Complete");
-            statusBox.getChildren().addAll(retourLabel, completeButton);
-            sidePanel.getChildren().add(statusBox);
+            // Toon retourstatus op een visueel aantrekkelijke manier, indien beschikbaar
+            if (order != null) {
+                Label retourLabel = new Label("Retour: " + (order.getRetour() ? "Yes" : "No"));
+                retourLabel.getStyleClass().add(order.getRetour() ? "retour-true" : "retour-false");
+                sidePanel.getChildren().add(retourLabel);
+            } else {
+                sidePanel.getChildren().add(new Label("Retour: N/A"));
+            }
         }
 
         return sidePanel;
@@ -102,6 +106,7 @@ public class RouteViewer {
         // Neem alleen de adresgegevens van de route-stappen
         List<String> addresses = route.getRouteSteps().stream()
                 .map(RouteStepDTO::getOrder)
+                .filter(order -> order != null && order.getAddress() != null) // Voeg een filter toe om null-adressen te verwijderen
                 .map(order -> order.getAddress().getStreet() + " " +
                         order.getAddress().getHouseNumber() + ", " +
                         order.getAddress().getCity())
@@ -116,6 +121,7 @@ public class RouteViewer {
 
     public void start(Stage stage, String token, int routeId) {
         Scene scene = createScene(token, routeId);
+        scene.getStylesheets().add("/RouteViewer.css");
         stage.setScene(scene);
         stage.show();
     }

@@ -1,15 +1,21 @@
 package com.vintageforlife.client.homepage;
 
-import com.vintageforlife.client.http.RouteViewer;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import com.vintageforlife.client.App;
+import com.vintageforlife.client.dto.RouteDTO;
+import com.vintageforlife.client.dto.UserDTO;
 import com.vintageforlife.client.http.HttpService;
+import com.vintageforlife.client.http.RouteService;
+import com.vintageforlife.client.http.RouteViewer;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
+
+import java.util.List;
 
 public class Homepage {
 
@@ -18,38 +24,46 @@ public class Homepage {
         Label logoLabel = new Label("Vintage For Life");
         logoLabel.getStyleClass().add("label-vintage");
 
-        // GridPane voor het weergeven van de route-informatie en knoppen
-        GridPane routesGrid = new GridPane();
-        routesGrid.setHgap(10);
-        routesGrid.setVgap(10);
+        // HBox voor de bovenste balk met logo en profielknop
+        HBox topBar = new HBox();
+        topBar.getChildren().add(logoLabel);
+        topBar.setSpacing(10);
 
-        // Labels voor de route-informatie
-        Label routeInfoLabel1 = new Label("Route 1 informatie");
-        Label routeInfoLabel2 = new Label("Route 2 informatie");
+        // Profielknop
+        Button profileButton = new Button();
+        profileButton.getStyleClass().add("icon-button");
+        profileButton.setGraphic(new Label("\uD83D\uDC64")); // Unicode voor gebruikerspictogram
 
-        // Knoppen voor het inzien, wijzigen en verwijderen van de routes
-        Button inzienButton1 = new Button("Inzien");
-        Button wijzigButton1 = new Button("Wijzig");
+        // Ingelogde gebruikersnaam
+        UserDTO currentUser = HttpService.getCurrentUser();
+        String username = (currentUser != null) ? currentUser.getName() : "Unknown";
+        Label usernameLabel = new Label("Ingelogd als: " + username);
 
+        HBox.setHgrow(logoLabel, Priority.ALWAYS);
+        topBar.getChildren().addAll(profileButton, usernameLabel);
 
-        Button inzienButton2 = new Button("Inzien");
-        Button wijzigButton2 = new Button("Wijzig");
+        // TableView voor het weergeven van routes
+        TableView<RouteDTO> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        TableColumn<RouteDTO, String> routeNameColumn = new TableColumn<>("Route naam");
+        routeNameColumn.setCellValueFactory(data -> new SimpleStringProperty("Route " + data.getValue().getId()));
 
-        // Actie voor het inzien van Route 1
-        inzienButton1.setOnAction(event -> startRouteViewer(primaryStage, 1));
+        TableColumn<RouteDTO, Void> viewColumn = new TableColumn<>("Inzien");
+        viewColumn.setCellFactory(col -> createButtonCell("Route"));
 
-        // Actie voor het inzien van Route 2
-        inzienButton2.setOnAction(event -> startRouteViewer(primaryStage, 2));
+        tableView.getColumns().addAll(routeNameColumn, viewColumn);
 
-        // Toevoegen van route-informatie en knoppen aan de GridPane
-        routesGrid.addRow(0, new Label("Route Informatie"), new Label("Inzien"), new Label("Wijzig"));
-        routesGrid.addRow(1, routeInfoLabel1, inzienButton1, wijzigButton1);
-        routesGrid.addRow(2, routeInfoLabel2, inzienButton2, wijzigButton2);
+        // Routes ophalen
+        List<RouteDTO> routes = RouteService.getRoutes();
+        ObservableList<RouteDTO> observableRoutes = FXCollections.observableArrayList(routes);
 
-        // Toevoegen van de GridPane aan de root BorderPane
-        root.setTop(logoLabel);
-        root.setCenter(routesGrid);
+        // Stel de routes in de TableView in
+        tableView.setItems(observableRoutes);
+
+        // Toevoegen van de onderdelen aan de root BorderPane
+        root.setTop(topBar);
+        root.setCenter(tableView);
 
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("Vintage For Life");
@@ -59,6 +73,29 @@ public class Homepage {
         scene.getStylesheets().add("/Homepage.css");
 
         return scene;
+    }
+
+    private TableCell<RouteDTO, Void> createButtonCell(String text) {
+        return new TableCell<>() {
+            private final Button button = new Button(text);
+
+            {
+                button.setOnAction(event -> {
+                    RouteDTO route = getTableView().getItems().get(getIndex());
+                    startRouteViewer((Stage) getTableView().getScene().getWindow(), route.getId());
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(button);
+                }
+            }
+        };
     }
 
     private void startRouteViewer(Stage primaryStage, int routeId) {

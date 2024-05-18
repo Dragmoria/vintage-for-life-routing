@@ -4,8 +4,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.List;
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ public class RouteService {
 
         // Haal het token op
         String token = HttpService.getToken();
+        System.out.println("Using token: " + token); // Voeg deze regel toe voor debug-doeleinden
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
@@ -29,7 +28,7 @@ public class RouteService {
                 .build();
 
         try {
-            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
 
             if (statusCode == 200) {
