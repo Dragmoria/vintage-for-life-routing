@@ -41,5 +41,5 @@ public class ProductEntity {
     private Float depth;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<OrderItemEntity> orderItemEntities;
+    private List<OrderItemEntity> orderItems;
 }
