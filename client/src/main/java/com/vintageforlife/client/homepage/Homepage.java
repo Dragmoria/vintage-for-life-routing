@@ -1,7 +1,9 @@
 package com.vintageforlife.client.homepage;
 
+import com.vintageforlife.client.UserManagement.UserManagement;
 import com.vintageforlife.client.dto.RouteDTO;
 import com.vintageforlife.client.dto.UserDTO;
+import com.vintageforlife.client.enums.Role;
 import com.vintageforlife.client.http.HttpService;
 import com.vintageforlife.client.http.RouteService;
 import com.vintageforlife.client.http.RouteViewer;
@@ -11,13 +13,20 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class Homepage {
+    private UserManagement userManagement;
+
+    public void setUserManagement(UserManagement userManagement) {
+        this.userManagement = userManagement;
+    }
 
     public Scene display(Stage primaryStage) {
         BorderPane root = new BorderPane();
@@ -42,6 +51,22 @@ public class Homepage {
         HBox.setHgrow(logoLabel, Priority.ALWAYS);
         topBar.getChildren().addAll(profileButton, usernameLabel);
 
+        // Voeg de topBar toe aan de top van de BorderPane
+        root.setTop(topBar);
+
+        // Create a button that navigates to the UserManagement page
+        Button userManagementButton = new Button("User Management");
+        userManagementButton.setOnAction(e -> primaryStage.setScene(userManagement.display(primaryStage)));
+
+        // Controleer de rol van de ingelogde gebruiker
+        if (currentUser == null || currentUser.getRole() != Role.ADMIN) {
+            userManagementButton.setVisible(false); // Verberg de knop als de gebruiker geen admin is
+        }
+
+        // Voeg de UserManagement knop toe aan een VBox
+        VBox topBox = new VBox(topBar, userManagementButton);
+        root.setTop(topBox);
+
         // TableView voor het weergeven van routes
         TableView<RouteDTO> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -61,8 +86,7 @@ public class Homepage {
         // Stel de routes in de TableView in
         tableView.setItems(observableRoutes);
 
-        // Toevoegen van de onderdelen aan de root BorderPane
-        root.setTop(topBar);
+        // Voeg de TableView toe aan de center van de BorderPane
         root.setCenter(tableView);
 
         Scene scene = new Scene(root, 800, 600);

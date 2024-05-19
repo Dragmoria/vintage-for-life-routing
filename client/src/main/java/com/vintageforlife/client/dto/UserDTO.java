@@ -1,5 +1,6 @@
 package com.vintageforlife.client.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.vintageforlife.client.enums.Role;
 import com.vintageforlife.client.validation.ValidRole;
@@ -8,8 +9,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
+
+    private Integer id;
+
     @NotBlank(message = "Name can not be blank")
     private String name;
 
@@ -30,12 +35,17 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(String name, String email, String password, Role role) {
+    public UserDTO(Integer id, String name, String email, String password, Role role) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
+
+    public Integer getId() {return id;}
+
+    public void setId(Integer id) {this.id = id;}
 
     public String getName() {
         return name;

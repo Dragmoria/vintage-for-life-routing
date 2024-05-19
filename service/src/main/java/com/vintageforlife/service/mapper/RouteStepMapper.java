@@ -15,11 +15,13 @@ import java.util.List;
 public class RouteStepMapper implements Mapper<RouteStepEntity, RouteStepDTO>{
     private final RouteMapper routeMapper;
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
 
     @Autowired
-    public RouteStepMapper(RouteMapper routeMapper, OrderMapper orderMapper) {
+    public RouteStepMapper(RouteMapper routeMapper, OrderMapper orderMapper, OrderItemMapper orderItemMapper) {
         this.routeMapper = routeMapper;
         this.orderMapper = orderMapper;
+        this.orderItemMapper = orderItemMapper;
     }
 
     @Override

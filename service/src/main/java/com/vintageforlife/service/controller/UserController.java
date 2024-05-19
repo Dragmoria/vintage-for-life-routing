@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
@@ -23,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/user/info", produces = "application/json")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PLANNER', 'ROLE_USER', 'ROLE_CARRIER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_PLANNER', 'ROLE_CARRIER')")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<UserDTO> getUserInformation() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,4 +37,25 @@ public class UserController {
         UserDTO user = userService.getUserByEmail(username);
         return ResponseEntity.ok(user);
     }
+    @GetMapping(value = "/userbeheer", produces = "application/json")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @DeleteMapping(value = "/userbeheer/{id}")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/userbeheer/{id}")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO user) {
+        UserDTO updatedUser = userService.updateUser(id, user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
 }

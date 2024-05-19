@@ -24,6 +24,9 @@ module com.vintageforlife.client {
     opens com.vintageforlife.client to javafx.fxml;
     exports com.vintageforlife.client.enums;
     opens com.vintageforlife.client.enums to javafx.fxml;
+    exports com.vintageforlife.client.UserManagement;
+    opens com.vintageforlife.client.UserManagement to javafx.fxml;
+
 
 
 

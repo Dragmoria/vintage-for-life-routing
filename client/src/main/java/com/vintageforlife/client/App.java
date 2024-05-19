@@ -1,30 +1,32 @@
 package com.vintageforlife.client;
 
-//import com.vintageforlife.client.http.CreateAccountPage;
+import com.vintageforlife.client.UserManagement.UserManagement;
+import com.vintageforlife.client.homepage.Homepage;
 import com.vintageforlife.client.http.HttpService;
 import com.vintageforlife.client.http.RouteViewer;
-import com.vintageforlife.client.homepage.Homepage;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 
 public class App extends Application {
 
     @Override
     public void start(Stage stage) {
         // Labels
-        Label nameLabel = new Label("Naam:");
-        Label passwordLabel = new Label("Wachtwoord:");
+        Label emailLabel = new Label("Email:");
+        Label passwordLabel = new Label("Password:");
 
         // TextFields
-        TextField nameField = new TextField();
+        TextField emailField = new TextField();
         PasswordField passwordField = new PasswordField();
 
         // Button
-        Button loginButton = new Button("Inloggen");
+        Button loginButton = new Button("Login");
 
         // GridPane layout
         GridPane grid = new GridPane();
@@ -33,36 +35,46 @@ public class App extends Application {
         grid.setVgap(10);
 
         // Adding elements to the GridPane
-        grid.add(nameLabel, 0, 0);
-        grid.add(nameField, 1, 0);
+        grid.add(emailLabel, 0, 0);
+        grid.add(emailField, 1, 0);
         grid.add(passwordLabel, 0, 1);
         grid.add(passwordField, 1, 1);
         grid.add(loginButton, 1, 2);
 
         // Setting alignment for the GridPane elements
-        GridPane.setConstraints(nameLabel, 0, 0);
-        GridPane.setConstraints(nameField, 1, 0);
+        GridPane.setConstraints(emailLabel, 0, 0);
+        GridPane.setConstraints(emailField, 1, 0);
         GridPane.setConstraints(passwordLabel, 0, 1);
         GridPane.setConstraints(passwordField, 1, 1);
         GridPane.setConstraints(loginButton, 1, 2);
 
-        // Handling loginButton action
+        // Maak instanties van de noodzakelijke klassen
+        Homepage homepage = new Homepage();
+        RouteViewer routeViewer = new RouteViewer();
+        UserManagement userManagement = new UserManagement();
+        HttpService httpService = new HttpService();
+
+        // Stel de afhankelijkheden in
+        homepage.setUserManagement(userManagement);
+        userManagement.setHomepage(homepage);
+        userManagement.setUserService(httpService);
+
+        // Handling voor loginButton
         loginButton.setOnAction(event -> {
-            String name = nameField.getText();
+            String email = emailField.getText();
             String password = passwordField.getText();
 
             // Aanroepen van HttpService.validateLogin
-            boolean loginSuccessful = HttpService.validateLogin(name, password);
+            boolean loginSuccessful = httpService.validateLogin(email, password);
 
             if (loginSuccessful) {
                 // Haal de token op na een succesvolle login
-                String token = HttpService.getToken();
+                String token = httpService.getToken();
 
                 // Toon de Homepage
-                Homepage homepage = new Homepage();
-                homepage.display(stage);
+                stage.setScene(homepage.display(stage));
             } else {
-                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid name or password.");
+                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid email or password.");
             }
         });
 
@@ -71,7 +83,7 @@ public class App extends Application {
 
         // Stage instellen
         stage.setScene(scene);
-        stage.setTitle("Inlog scherm");
+        stage.setTitle("Login Screen");
         scene.getStylesheets().add("/style.css");
         stage.show();
     }

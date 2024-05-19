@@ -14,6 +14,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
+
+    private Integer id;
+
     @NotBlank(message = "Name can not be blank")
     private String name;
 

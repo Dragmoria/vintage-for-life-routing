@@ -2,9 +2,11 @@ package com.vintageforlife.service.services.database;
 
 import com.vintageforlife.service.dto.*;
 import com.vintageforlife.service.routing.Algorithm;
+import com.vintageforlife.service.routing.Node;
 import com.vintageforlife.service.routing.Problem;
 import com.vintageforlife.service.routing.Solution;
 import com.vintageforlife.service.routing.genetic.AlgorithmSettings;
+import com.vintageforlife.service.routing.genetic.Truck;
 import com.vintageforlife.service.services.googleApi.Matrix;
 import com.vintageforlife.service.services.googleApi.MatrixResponse;
 import org.springframework.beans.factory.annotation.Autowired;
