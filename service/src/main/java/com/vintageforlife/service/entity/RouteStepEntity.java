@@ -1,7 +1,6 @@
 package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -17,7 +16,7 @@ public class RouteStepEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "step_index", nullable = false)
     @NonNull
@@ -36,8 +35,7 @@ public class RouteStepEntity {
     @NonNull
     private RouteEntity route;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "order_item_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ROUTE_STEP_TO_ORDER_ITEM_ID"))
-    @NonNull
-    private OrderItemEntity orderItem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ROUTE_STEP_TO_ORDER_ID"))
+    private OrderEntity order;
 }

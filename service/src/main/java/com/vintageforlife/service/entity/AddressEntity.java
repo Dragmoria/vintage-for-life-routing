@@ -1,8 +1,6 @@
 package com.vintageforlife.service.entity;
 
-import com.vintageforlife.service.validation.SizeThatAllowsNull;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;

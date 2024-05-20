@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+import java.util.Objects;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
@@ -34,4 +36,33 @@ public class AddressDTO {
     @NotBlank(message = "City can not be blank")
     @NonNull
     private String city;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AddressDTO that = (AddressDTO) o;
+
+        if (!postCode.equals(that.postCode)) return false;
+        if (!street.equals(that.street)) return false;
+        if (!houseNumber.equals(that.houseNumber)) return false;
+        if (!Objects.equals(extension, that.extension)) return false;
+        return city.equals(that.city);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = postCode.hashCode();
+        result = 31 * result + street.hashCode();
+        result = 31 * result + houseNumber.hashCode();
+        result = 31 * result + (extension != null ? extension.hashCode() : 0);
+        result = 31 * result + city.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return street + " " + houseNumber + (extension != null ? extension : "") + ", " + postCode + " " + city + ", Netherlands";
+    }
 }

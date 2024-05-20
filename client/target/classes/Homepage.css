@@ -1,0 +1,43 @@
+/* Homepage.css */
+
+/* Stijlen voor de bovenste navigatiebalk */
+.label-vintage {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+/* Stijlen voor de route-tabel */
+.table-view {
+    -fx-padding: 20px;
+    -fx-font-size: 14px;
+}
+
+.table-column {
+    -fx-font-size: 14px;
+}
+
+.button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #0056b3;
+}
+
+.button:pressed {
+    -fx-background-color: #0056b3;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.icon-button .icon {
+    font-size: 18px;
+}
+

@@ -1,7 +1,6 @@
 package com.vintageforlife.service.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Date;
@@ -33,7 +32,14 @@ public class OrderEntity {
     @NonNull
     private AddressEntity address;
 
+    @Column(name = "retour", nullable = false)
+    @NonNull
+    private Boolean retour;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderItemEntity> orderItemEntities;
+    private List<RouteStepEntity> routeStep;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderItemEntity> orderItems;
 }
 

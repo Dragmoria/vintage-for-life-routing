@@ -41,4 +41,9 @@ public class DefaultCustomerService implements CustomerService {
                 .map(customerMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteCustomer(Integer externalId) {
+        customerRepository.deleteByExternalId(externalId);
+    }
 }
