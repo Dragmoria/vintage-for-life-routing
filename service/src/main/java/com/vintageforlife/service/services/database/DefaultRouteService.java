@@ -1,11 +1,10 @@
 package com.vintageforlife.service.services.database;
 
+import com.vintageforlife.service.dto.DistributionCenterDTO;
+import com.vintageforlife.service.dto.OrderDTO;
 import com.vintageforlife.service.dto.RouteDTO;
 import com.vintageforlife.service.dto.RouteStepDTO;
-import com.vintageforlife.service.entity.OrderEntity;
-import com.vintageforlife.service.entity.RouteEntity;
-import com.vintageforlife.service.entity.RouteStepEntity;
-import com.vintageforlife.service.entity.UserEntity;
+import com.vintageforlife.service.entity.*;
 import com.vintageforlife.service.mapper.OrderMapper;
 import com.vintageforlife.service.mapper.RouteMapper;
 import com.vintageforlife.service.mapper.RouteStepMapper;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -28,15 +26,23 @@ public class DefaultRouteService implements RouteService {
     private final RouteStepMapper routeStepMapper;
     private final OrderService orderService;
     private final OrderMapper orderMapper;
+    private final DistributionCenterService distributionCenterService;
 
     @Autowired
-    public DefaultRouteService(RouteRepository routeRepository, RouteMapper routeMapper, UserRepository userRepository, RouteStepMapper routeStepMapper, OrderService orderService, OrderMapper orderMapper) {
+    public DefaultRouteService(RouteRepository routeRepository,
+                               RouteMapper routeMapper,
+                               UserRepository userRepository,
+                               RouteStepMapper routeStepMapper,
+                               OrderService orderService,
+                               OrderMapper orderMapper,
+                               DistributionCenterService distributionCenterService) {
         this.routeRepository = routeRepository;
         this.routeMapper = routeMapper;
         this.userRepository = userRepository;
         this.routeStepMapper = routeStepMapper;
         this.orderService = orderService;
         this.orderMapper = orderMapper;
+        this.distributionCenterService = distributionCenterService;
     }
 
     @Override
@@ -70,6 +76,14 @@ public class DefaultRouteService implements RouteService {
                                 if (routeStepEntity.getOrder() != null) {
                                     OrderEntity orderEntity = orderService.getOrderEntity(routeStepEntity.getOrder().getId());
                                     routeStepDTO.setOrder(orderMapper.toDTO(orderEntity));
+                                }
+                                else {
+                                    DistributionCenterDTO distributionCenterDTO = distributionCenterService.getDistributionCenterById(1);
+
+                                    OrderDTO orderDTO = new OrderDTO();
+                                    orderDTO.setAddress(distributionCenterDTO.getAddress());
+                                    orderDTO.setRetour(false);
+                                    routeStepDTO.setOrder(orderDTO);
                                 }
 
                                 return routeStepDTO;

@@ -2,24 +2,26 @@ package com.vintageforlife.service.routing.genetic;
 
 import com.vintageforlife.service.dto.TransportSettingDTO;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
+@Setter
 public class AlgorithmSettings {
-    private final float truckWidth;
+    private float truckWidth;
 
-    private final float truckLength;
+    private float truckLength;
 
-    private final double mutationRate;
+    private double mutationRate;
 
-    private final double distanceWeight;
+    private double distanceWeight;
 
-    private final double trucksUsedWeight;
+    private double trucksUsedWeight;
 
-    private final int populationSize;
+    private int populationSize;
 
-    private final int amountOfGenerations;
+    private int amountOfGenerations;
 
     public AlgorithmSettings(List<TransportSettingDTO> transportSettings) {
         this.truckWidth = Float.parseFloat(transportSettings.stream()
@@ -63,5 +65,8 @@ public class AlgorithmSettings {
                 .map(TransportSettingDTO::getValue)
                 .findFirst()
                 .orElse("100"));
+    }
+
+    public AlgorithmSettings() {
     }
 }

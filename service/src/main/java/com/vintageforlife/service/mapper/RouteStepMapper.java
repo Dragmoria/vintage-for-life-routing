@@ -1,11 +1,8 @@
 package com.vintageforlife.service.mapper;
 
-import com.vintageforlife.service.dto.OrderDTO;
-import com.vintageforlife.service.dto.OrderItemDTO;
 import com.vintageforlife.service.dto.RouteStepDTO;
 import com.vintageforlife.service.entity.OrderEntity;
 import com.vintageforlife.service.entity.RouteStepEntity;
-import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +12,11 @@ import java.util.List;
 public class RouteStepMapper implements Mapper<RouteStepEntity, RouteStepDTO>{
     private final RouteMapper routeMapper;
     private final OrderMapper orderMapper;
-    private final OrderItemMapper orderItemMapper;
 
     @Autowired
-    public RouteStepMapper(RouteMapper routeMapper, OrderMapper orderMapper, OrderItemMapper orderItemMapper) {
+    public RouteStepMapper(RouteMapper routeMapper, OrderMapper orderMapper) {
         this.routeMapper = routeMapper;
         this.orderMapper = orderMapper;
-        this.orderItemMapper = orderItemMapper;
     }
 
     @Override

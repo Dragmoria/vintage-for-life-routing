@@ -1,6 +1,5 @@
 package com.vintageforlife.service.controller;
 
-import com.vintageforlife.service.entity.CustomerEntity;
 import com.vintageforlife.service.services.database.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

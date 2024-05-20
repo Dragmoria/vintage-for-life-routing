@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfig {
+    /**
+     * This method creates a custom OpenAPI object that defines a bearer token security scheme. Is used to configure swagger-ui.
+     * @return OpenAPI object
+     */
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()

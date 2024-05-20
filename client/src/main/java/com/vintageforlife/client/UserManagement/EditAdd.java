@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import com.vintageforlife.client.dto.UserDTO;
 import com.vintageforlife.client.http.HttpService;
 
 public class EditAdd {

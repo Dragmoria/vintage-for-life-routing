@@ -18,7 +18,7 @@ public class CustomerEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "external_id", nullable = false)
+    @Column(name = "external_id", nullable = false, unique = true)
     @NonNull
     private Integer externalId;
 

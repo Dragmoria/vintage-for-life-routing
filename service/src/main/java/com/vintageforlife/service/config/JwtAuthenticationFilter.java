@@ -31,6 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userService;
     }
 
+    /**
+     * The JWT authentication filter. Is added to the spring security filter chain. It handles all the things to do with the JWT token. Like extracting information or setting the current authentication.
+     * @param request
+     * @param response
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
@@ -47,6 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Extracts user information from the JWT token in order to create an authentication object.
+     * @param request
+     * @return
+     */
     private Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader("Authorization")
                 .replace("Bearer ", "");

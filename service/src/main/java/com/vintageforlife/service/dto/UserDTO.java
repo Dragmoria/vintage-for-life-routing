@@ -1,6 +1,5 @@
 package com.vintageforlife.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.vintageforlife.service.enums.Role;
 import com.vintageforlife.service.validation.ValidRole;

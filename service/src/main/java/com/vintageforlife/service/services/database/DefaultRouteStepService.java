@@ -1,6 +1,5 @@
 package com.vintageforlife.service.services.database;
 
-import com.vintageforlife.service.dto.RouteStepDTO;
 import com.vintageforlife.service.dto.SimpleRouteStepDTO;
 import com.vintageforlife.service.entity.RouteStepEntity;
 import com.vintageforlife.service.exception.NotAuthorizedException;
