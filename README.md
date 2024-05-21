@@ -9,7 +9,6 @@ MYSQL_USER=admin
 MYSQL_PASSWORD=
 JWT_SECRET_KEY=
 COMPOSE_PROJECT_NAME=vintageforlife
-MYSQL_PORT=3306
 
 When starting the service application it will start up a Swagger UI on http://hostname:port/swagger-ui.html which by default is http://localhost:8080/swagger-ui.html
 

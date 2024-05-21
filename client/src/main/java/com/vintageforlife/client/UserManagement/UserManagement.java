@@ -21,11 +21,6 @@ import java.util.List;
 public class UserManagement {
     private HttpService userService;
     private Homepage homepage;
-    private final EditAdd editAdd;
-
-    public UserManagement() {
-        this.editAdd = new EditAdd();
-    }
 
     public void setUserService(HttpService userService) {
         this.userService = userService;

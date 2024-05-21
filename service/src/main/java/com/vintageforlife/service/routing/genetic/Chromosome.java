@@ -58,19 +58,19 @@ public class Chromosome {
         calculateDistanceOfTrucks();
 
         // Normalize the distance and trucks used to a value between 0 and 1. If the distance is less than 0, the fitness will be 0.01.
-        double distanceFitness = 1 - (totalDistance / (double) maxDistance);
+        double distanceFitness = (totalDistance / (double) maxDistance);
         if (distanceFitness < 0) {
             distanceFitness = 0.01;
         }
 
         // Same for the trucks used
-        double trucksUsedFitness = 1 - (trucks.size() / (double) maxTrucksUsed);
+        double trucksUsedFitness = (trucks.size() / (double) maxTrucksUsed);
         if (trucksUsedFitness < 0) {
             trucksUsedFitness = 0.01;
         }
 
         // Calculate the fitness value based on the weights of the distance and trucks used
-        fitness = distanceFitness * distanceWeight + trucksUsedFitness * trucksUsedWeight;
+        fitness = 1 - (distanceFitness * distanceWeight + trucksUsedFitness * trucksUsedWeight);
     }
 
     /**
@@ -83,9 +83,18 @@ public class Chromosome {
         for (Truck truck: trucks) {
             totalDistance += startAndEndNode.getDistanceTo(itemNodeMap.get(truck.getAddedOrders().getFirst()));
 
+            Node lastNode = startAndEndNode;
+
             for (OrderItemDTO orderItem: truck.getAddedOrders()) {
                 Node node = itemNodeMap.get(orderItem);
-                totalDistance += node.getDistanceTo(node);
+
+                if (lastNode == node) {
+                    continue;
+                }
+
+                totalDistance += lastNode.getDistanceTo(node);
+
+                lastNode = node;
             }
 
             totalDistance += startAndEndNode.getDistanceTo(itemNodeMap.get(truck.getAddedOrders().getLast()));

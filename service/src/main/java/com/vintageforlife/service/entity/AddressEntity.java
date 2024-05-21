@@ -44,4 +44,9 @@ public class AddressEntity {
 
     @OneToOne(mappedBy = "address", fetch = FetchType.LAZY)
     private DistributionCenterEntity distributionCenter;
+
+    @Override
+    public String toString() {
+        return street + " " + houseNumber + (extension != null ? extension : "") + ", " + postcode + " " + city + ", Netherlands";
+    }
 }
