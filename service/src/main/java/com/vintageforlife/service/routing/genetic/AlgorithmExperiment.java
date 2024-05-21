@@ -73,7 +73,7 @@ public class AlgorithmExperiment {
 
         int loops = 0;
 
-        for (int i = 1; i <= orders.size(); i++) {
+        for (int i = 5; i <= orders.size(); i++) {
             List<OrderDTO> sublist = orders.subList(0, i);
 
             loops++;

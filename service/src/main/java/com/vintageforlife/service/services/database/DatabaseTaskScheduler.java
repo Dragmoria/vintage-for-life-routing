@@ -94,7 +94,7 @@ public class DatabaseTaskScheduler {
         Problem problem = new Problem(matrixResponse, orders, distributionCenterDTO.getAddress());
 
         Solution solution = algorithm.solve(problem, algorithmSettings);
-        saveRoutes(solution);
+//        saveRoutes(solution);
     }
 
     private void saveRoutes(Solution solution) {

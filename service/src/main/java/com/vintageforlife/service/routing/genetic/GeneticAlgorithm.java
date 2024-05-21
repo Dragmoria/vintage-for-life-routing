@@ -69,9 +69,20 @@ public class GeneticAlgorithm implements Algorithm {
 
         // Main loop of the algorithm. This loop will run until the exit condition is met.
         while (exitConditionNotMet()) {
+            int notFound = 0;
+
             for (Chromosome chromosome : population) {
+                if(!allTriedChromosomes.contains(chromosome.hashCode())) {
+                    notFound++;
+                }
                 allTriedChromosomes.add(chromosome.hashCode());
             }
+
+            double percentageNotFound = (double) notFound / population.size() * 100;
+
+            System.out.println("Percentage not found: " + percentageNotFound);
+
+
             evaluatePopulation();
             checkForMaximums();
             crossover();
@@ -189,7 +200,7 @@ public class GeneticAlgorithm implements Algorithm {
      * This function will select two parents from the population based on their fitness values. The fitter a chromosome is, the more likely it is to be selected as a parent.
      * @return A chromosome that is selected as a parent.
      */
-    private Chromosome selectParents() {
+    private Chromosome selectParentsRoulette() {
         double totalFitness = population.stream().mapToDouble(Chromosome::getFitness).sum();
 
         double randomFitness = new Random().nextDouble() * totalFitness;
@@ -207,6 +218,23 @@ public class GeneticAlgorithm implements Algorithm {
         return population.getLast();
     }
 
+    private Chromosome selectParentsTournament() {
+        int tournamentSize = 5;
+        List<Chromosome> tournament = new ArrayList<>();
+        for (int i = 0; i < tournamentSize; i++) {
+            tournament.add(population.get(new Random().nextInt(population.size())));
+        }
+        return tournament.stream().max(Comparator.comparingDouble(Chromosome::getFitness)).orElseThrow(() -> new RuntimeException("No solution found"));
+    }
+
+    private List<Chromosome> selectAmountOfOldGeneration(int amount, List<Chromosome> population) {
+        List<Chromosome> newPopulation = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            newPopulation.add(population.get(i));
+        }
+        return newPopulation;
+    }
+
     /**
      * This function will cross two selected parents with each other. It will create two children that share some genetic information with their parents. This is done until the population is filled again.
      */
@@ -216,14 +244,20 @@ public class GeneticAlgorithm implements Algorithm {
         // Sorts the population based on their fitness values.
         population.sort(Comparator.comparingDouble(Chromosome::getFitness).reversed());
 
-        // Elitism, the best chromosome from the previous generation is always added to the new generation.
-        newPopulation.add(population.getFirst());
+        // Elitism, the best chromosomes from the previous generation is always added to the new generation.
+        newPopulation.addAll(selectAmountOfOldGeneration(10, population));
+        System.out.println(population.getFirst().getTotalDistance());
 
         int totalNodes = problem.getGraph().size();
 
         while (newPopulation.size() < settings.getPopulationSize()) {
-            Chromosome parent1 = selectParents();
-            Chromosome parent2 = selectParents();
+            Chromosome parent1 = selectParentsTournament();
+            Chromosome parent2 = selectParentsRoulette();
+
+            // Prevent inbreeding
+            while (parent1.equals(parent2)) {
+                parent2 = selectParentsTournament();
+            }
 
             // selects a random crossover point
             int crossoverPoint = new Random().nextInt(totalNodes);
@@ -295,7 +329,7 @@ public class GeneticAlgorithm implements Algorithm {
      * @return True if the exit condition is not met, false if the exit condition is met.
      */
     private boolean exitConditionNotMet() {
-        System.out.println("Generation: " + generations);
+//        System.out.println("Generation: " + generations);
         return generations++ < settings.getAmountOfGenerations();
     }
 }
