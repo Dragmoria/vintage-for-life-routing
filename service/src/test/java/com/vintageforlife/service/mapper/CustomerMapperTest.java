@@ -3,6 +3,7 @@ package com.vintageforlife.service.mapper;
 import com.vintageforlife.service.dto.CustomerDTO;
 import com.vintageforlife.service.entity.CustomerEntity;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CustomerMapperTest {
     private final CustomerMapper customerMapper;
 
+    @Autowired
     public CustomerMapperTest(CustomerMapper customerMapper) {
         this.customerMapper = customerMapper;
     }

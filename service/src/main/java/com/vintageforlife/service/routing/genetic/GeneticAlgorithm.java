@@ -69,21 +69,13 @@ public class GeneticAlgorithm implements Algorithm {
 
         // Main loop of the algorithm. This loop will run until the exit condition is met.
         while (exitConditionNotMet()) {
-            int notFound = 0;
-
             for (Chromosome chromosome : population) {
-                if(!allTriedChromosomes.contains(chromosome.hashCode())) {
-                    notFound++;
-                }
                 allTriedChromosomes.add(chromosome.hashCode());
             }
 
-            double percentageNotFound = (double) notFound / population.size() * 100;
-
-            System.out.println("Percentage not found: " + percentageNotFound);
-
 
             evaluatePopulation();
+
             checkForMaximums();
             crossover();
         }
@@ -239,13 +231,17 @@ public class GeneticAlgorithm implements Algorithm {
      * This function will cross two selected parents with each other. It will create two children that share some genetic information with their parents. This is done until the population is filled again.
      */
     private void crossover() {
-        List<Chromosome> newPopulation = new ArrayList<>();
-
         // Sorts the population based on their fitness values.
         population.sort(Comparator.comparingDouble(Chromosome::getFitness).reversed());
 
+        Set<Double> uniqueFitnessValues = new HashSet<>();
+
+        population = population.stream()
+                .filter(chromosome -> uniqueFitnessValues.add(chromosome.getFitness()))
+                .toList();
+
         // Elitism, the best chromosomes from the previous generation is always added to the new generation.
-        newPopulation.addAll(selectAmountOfOldGeneration(10, population));
+        List<Chromosome> newPopulation = new ArrayList<>(selectAmountOfOldGeneration(10, population));
         System.out.println(population.getFirst().getTotalDistance());
 
         int totalNodes = problem.getGraph().size();
