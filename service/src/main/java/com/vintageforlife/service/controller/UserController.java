@@ -38,6 +38,7 @@ public class UserController {
         UserDTO user = userService.getUserByEmail(username);
         return ResponseEntity.ok(user);
     }
+
     @GetMapping(value = "/userbeheer", produces = "application/json")
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<List<UserDTO>> getAllUsers() {

@@ -1,0 +1,12 @@
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (22, false, 445.18, 3);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (23, false, 440.766, 3);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (24, false, 486.388, 3);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (25, false, 439.082, 3);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (26, false, 404.339, 4);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (27, false, 598.821, 4);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (28, false, 462.705, 4);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (29, false, 444.471, 4);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (69, false, 423.532, 1);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (70, false, 450.116, 1);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (71, false, 485.015, 1);
+INSERT INTO vintageforlife.route (id, completed, total_distance_km, user_id) VALUES (72, false, 246.632, 1);

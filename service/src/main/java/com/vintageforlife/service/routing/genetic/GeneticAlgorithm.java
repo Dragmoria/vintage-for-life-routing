@@ -322,7 +322,7 @@ public class GeneticAlgorithm implements Algorithm {
      * @return True if the exit condition is not met, false if the exit condition is met.
      */
     private boolean exitConditionNotMet() {
-        System.out.println("Generation: " + generations);
+//        System.out.println("Generation: " + generations);
         return generations++ < settings.getAmountOfGenerations();
     }
 }

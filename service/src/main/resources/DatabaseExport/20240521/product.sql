@@ -1,0 +1,18 @@
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (1, 1, 1.5, 'Stoel', 1, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (2, 1.8, 0.8, 'Bank', 4, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (3, 2, 0.8, 'Bank 2', 2.5, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (4, 1.4, 0.9, 'Dressoir', 1.8, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (5, 1.1, 0.9, 'Dressoir 2', 1.5, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (6, 2, 0.3, 'Bed', 1.6, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (7, 1, 1, 'Bed 2', 2, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (8, 0.9, 0.8, 'Tafel', 1.8, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (9, 1, 0.8, 'Tafel 2', 2, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (10, 0.4, 1.9, 'Kleding kast', 1, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (11, 0.4, 0.8, 'Commode', 1.6, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (12, 0.5, 0.8, 'Kast', 0.8, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (13, 1, 1.5, 'Vloer lamp', 0.2, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (14, 0.5, 1.5, 'Vloer lamp 2', 0.5, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (15, 0.5, 1, 'Kruk', 0.6, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (16, 0.4, 0.8, 'Kruk 2', 0.4, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (17, 0.5, 0.5, 'Bankje', 0.5, 1);
+INSERT INTO vintageforlife.product (id, depth, height, name, width, distribution_center_id) VALUES (18, 0.5, 0.6, 'Salon tafel', 0.7, 1);
